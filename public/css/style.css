@@ -186,7 +186,7 @@ Intro
     height:435px;
     width:100%;
     background-color: #6b0cb0;
-    background-image: url(../images/bg-mac.png);
+/*    background-image: url(../images/bg-mac.png);*/
     background-position:center;
     background-repeat:no-repeat;
     overflow-y:hidden;
