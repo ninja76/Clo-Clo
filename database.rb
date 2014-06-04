@@ -1,18 +1,20 @@
 require 'sinatra'
 require 'sinatra/sequel'
+require 'config/database.rb'
 
 root = ::File.dirname(__FILE__)
 
 configure :development do
  #set :database, "sqlite:///#{root}/data/spice.db"
- set :database, "mysql://awsuser:flash109@myspiceinstance.cevpvmksyaz2.us-east-1.rds.amazonaws.com:3306/spice"
- set :show_exceptions, true
+ #set :database, "mysql://awsuser:flash109@myspiceinstance.cevpvmksyaz2.us-east-1.rds.amazonaws.com:3306/spice"
+ #set :show_exceptions, true
 end
 
 configure :production do
-# set :database, URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
- set :database, "sqlite:///#{root}/data/spice.db"
- set :show_exceptions, true
+#set :database, URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
+# set :database, "mysql://awsuser:flash109@myspiceinstance.cevpvmksyaz2.us-east-1.rds.amazonaws.com:3306/spice"
+# set :database, "sqlite:///#{root}/data/spice.db"
+# set :show_exceptions, true
 end
 puts "the accounts table doesn't exist" if !database.table_exists?('accounts')
 

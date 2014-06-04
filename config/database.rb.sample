@@ -1,0 +1,1 @@
+set :database, "mysql://user:password@mysqlhost:3306/spice"
