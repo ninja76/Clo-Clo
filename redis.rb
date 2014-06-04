@@ -1,1 +1,1 @@
-$redis = Redis.new(:url => "redis://107.170.108.193:6379/15")
+$redis = Redis.new(:url => "redis://107.170.234.60:6379/15")
