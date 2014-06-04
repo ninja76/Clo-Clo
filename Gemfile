@@ -8,8 +8,6 @@ gem 'sinatra-sequel'
 gem 'mysql'
 
 group :development do
-  gem 'sqlite3'
-  gem 'mysql'
 end
 
 group :production do
