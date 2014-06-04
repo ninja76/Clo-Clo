@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'sinatra/sequel'
-require 'config/database.rb'
+require_relative 'config/database.rb'
 
 root = ::File.dirname(__FILE__)
 
