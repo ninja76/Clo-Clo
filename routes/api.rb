@@ -1,7 +1,8 @@
 # encoding: utf-8
 get '/follow/:nodeID' do
   content_type :json
-  puts $redis.hgetall(params[:nodeID])  
+  result = $redis.hgetall(params[:nodeID])  
+  result.to_json
 end
 
 post '/create/:nodeID' do
@@ -15,6 +16,7 @@ end
 get '/create/:nodeID' do
   # Update Time stamp
   insert = $redis.hset(params[:nodeID], "updated_time", Time.now.to_f)
+  puts insert
   params.keys.each do |k|
    value = "{\"#{k}\":\"#{params[k]}\"}"
    if k != "splat" and k != "captures" and k != "geo"
