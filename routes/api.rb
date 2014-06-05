@@ -1,6 +1,7 @@
 # encoding: utf-8
-get '/follow/:node' do
-  
+get '/follow/:nodeID' do
+  content_type :json
+  puts $redis.hgetall(params[:nodeID])  
 end
 
 post '/create/:nodeID' do
@@ -16,18 +17,20 @@ get '/create/:nodeID' do
   insert = $redis.hset(params[:nodeID], "updated_time", Time.now.to_f)
   params.keys.each do |k|
    value = "{\"#{k}\":\"#{params[k]}\"}"
-   if k != "splat" and k != "captures"
+   if k != "splat" and k != "captures" and k != "geo"
      puts "Inserting new Key #{params[:nodeID]}, #{value}"
-     $redis.hsetnx(params[:nodeID], k, params[k])
+     $redis.hset(params[:nodeID], k, params[k])
    end
-   if k == "geo"
+   if k == "geo" and params[k] == "yes"
      geo = JSON.parse(geolookup(request.ip))
-     $redis.hsetnx(params[:nodeID], "latitude", geo["lat"])
-     $redis.hsetnx(params[:nodeID], "longitude", geo["long"])
+     $redis.hset(params[:nodeID], "latitude", geo["lat"])
+     $redis.hset(params[:nodeID], "longitude", geo["long"])
      puts "Inserting #{geo["lat"]}, #{geo["long"]} "
    end
   end
   $redis.expire(params[:nodeID],86400)
+  puts $redis.hgetall(params[:nodeID])
+  
   content_type :json
   return '{"result": "success"}' 
 end
