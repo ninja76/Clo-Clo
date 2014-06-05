@@ -6,6 +6,8 @@ gem 'sinatra-assetpack'
 gem 'redis'
 gem 'sinatra-sequel'
 gem 'mysql'
+gem 'foreman'
+gem 'thin'
 
 group :development do
 end
