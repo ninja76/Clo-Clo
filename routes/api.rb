@@ -22,6 +22,7 @@ get '/create/:nodeID' do
    end
   end
   $redis.expire(params[:nodeID],86400)
-  return "Done"
+  content_type :json
+  return '{"result": "success"}' 
 end
 
