@@ -20,6 +20,12 @@ get '/create/:nodeID' do
      puts "Inserting new Key #{params[:nodeID]}, #{value}"
      $redis.hsetnx(params[:nodeID], k, params[k])
    end
+   if k == "geo"
+     geo = JSON.parse(geolookup(request.ip))
+     $redis.hsetnx(params[:nodeID], "latitude", geo["lat"])
+     $redis.hsetnx(params[:nodeID], "longitude", geo["long"])
+     puts "Inserting #{geo["lat"]}, #{geo["long"]} "
+   end
   end
   $redis.expire(params[:nodeID],86400)
   content_type :json
