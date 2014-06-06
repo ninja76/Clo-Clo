@@ -13,8 +13,15 @@ window.onload=function(){
           url: '/register/submit',
 	    type: "POST",
 	    data : formData,
-            success: function(result) {
-              console.log(result);            
+            success: function(response) {
+              response = JSON.parse(response)
+              console.log(response);     
+              console.log(response.result);     
+              if (response.result == "fail") {
+                $("div.error").html("<b>"+response.error+"</b>");       
+	      } else {
+                $("div.error").html("<b>Your key is "+response.key+"</b>");
+	      }
             }
           });      
         }
