@@ -1,0 +1,23 @@
+section#about.home-section.bg-white
+  .container
+    .row
+      .col-md-offset-2.col-md-8
+        .section-heading
+          h2 What is Roxe?
+          p Roxe is a communications hub for the Internet of Things (IoT). Roxe makes it easy for IoT devices to share information with each other. No setup required! Feel free to sign up if want to get a key to make your data private, the choice is yours!
+    .row style="text-align:left;" 
+      pre
+        span.label.label-primary Post Syntax
+        p
+          | http://www.roxehub.com/create/&lt;nodeName&gt;?key1=value1&key2=value2
+          | Options: geo=yes will append Geo location data based on source IP to your post
+        span.label.label-primary Post Example
+        p Ex. http://www.roxehub.com/create/my_attic_sensor?temperature=72
+      pre
+        span.label.label-primary Get Syntax
+        p http://www.roxehub.com/get/&lt;nodeName&gt;
+        span.label.label-primary Get Example
+        p
+          | http://www.roxehub.com/get/my_attic_sensor
+          | Returns: {"created":"2014-06-01T08:23:39.712Z", "nodeID":"my_attic_sensor", "content":{"temperature":"72"}}
+

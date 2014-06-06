@@ -1,7 +1,6 @@
 # encoding: utf-8
   get '/index' do
-    geolookup("74.115.251.126")
-    erb :main
+    slim :main
   end
 
   get '/' do
@@ -9,5 +8,5 @@
   end
 
   get '/login' do
-    erb :login
+    slim :login
   end
