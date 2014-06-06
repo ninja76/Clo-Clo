@@ -12,12 +12,12 @@ section#about.home-section.bg-white
           | http://www.roxehub.com/create/&lt;nodeName&gt;?key1=value1&key2=value2
           | Options: geo=yes will append Geo location data based on source IP to your post
         span.label.label-primary Post Example
-        p Ex. http://www.roxehub.com/create/my_attic_sensor?temperature=72
+        p Ex. http://www.roxehub.com/create/co2_sensor_1?value=72
       pre
         span.label.label-primary Get Syntax
         p http://www.roxehub.com/get/&lt;nodeName&gt;
         span.label.label-primary Get Example
         p
-          | http://www.roxehub.com/get/my_attic_sensor
-          | Returns: {"created":"2014-06-01T08:23:39.712Z", "nodeID":"my_attic_sensor", "content":{"temperature":"72"}}
+          | http://www.roxehub.com/get/co2_sensor_1
+          | Returns: {"created":"1401990420.4595804", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
 
