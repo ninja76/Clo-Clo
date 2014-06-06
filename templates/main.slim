@@ -10,14 +10,19 @@ section#about.home-section.bg-white
         span.label.label-primary Post Syntax
         p
           | http://www.roxehub.com/create/&lt;nodeName&gt;?key1=value1&key2=value2
-          | Options: geo=yes will append Geo location data based on source IP to your post
+          | <br>Options: geo=yes will append Geo location data based on source IP to your post, key=<8-digit api key> will make this node private
         span.label.label-primary Post Example
         p Ex. http://www.roxehub.com/create/co2_sensor_1?value=72
+        p Private Ex. http://www.roxehub.com/create/traffic_sensor?value=231&key=123bd651
+
       pre
         span.label.label-primary Get Syntax
         p http://www.roxehub.com/get/&lt;nodeName&gt;
         span.label.label-primary Get Example
         p
           | http://www.roxehub.com/get/co2_sensor_1
-          | Returns: {"created":"1401990420.4595804", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
+          | <br>Returns: {"created":"1401990420.459", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
+        p
+          | http://www.roxehub.com/get/traffic_sensor?key=123bd651
+          | <br>Returns: {"created":"1401990420.149", "nodeID":"traffic_sensor", "content":{"value":"231"}}
 

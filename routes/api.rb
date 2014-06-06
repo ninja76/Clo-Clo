@@ -2,15 +2,16 @@
 get '/follow/:nodeID' do
   content_type :json
   result = $redis.hgetall(params[:nodeID])  
-  result.to_json
-end
-
-post '/create/:nodeID' do
-  data = JSON.parse(request.body.read)
-  redis.set("mykey", "hello world")
-  test = redis.get("mykey")
-  puts test
-  data.to_json
+  t_key = $redis.hget(params[:nodeID], "key")
+  if t_key == params[:key]
+    return result.to_json
+  end
+  if !t_key
+    return result.to_json
+  end
+  if t_key != params[:key]
+    return '{"result": "access deined to node"}'
+  end
 end
 
 get '/create/:nodeID' do
