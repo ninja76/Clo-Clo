@@ -6,7 +6,7 @@ window.onload=function(){
       var password = $('#inputPassword').val()
       var confirmpassword = $('#confirmPassword').val()
       if (password != confirmpassword) {
-        $("div.error").html("<b>Passwords do not match</b>");
+        $("div.error").html('<div class="alert alert-warning">Passwords do not match</div>');
       } else {
         var formData = {username:username, email:email, password:password};
         $.ajax({
@@ -18,9 +18,9 @@ window.onload=function(){
               console.log(response);     
               console.log(response.result);     
               if (response.result == "fail") {
-                $("div.error").html("<b>"+response.error+"</b>");       
+                $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");       
 	      } else {
-                $("div.error").html("<b>Your key is "+response.key+"</b>");
+                $("div.error").html('<div class="alert alert-success">Registration successful here is your key is '+response.key+'</div>');
 	      }
             }
           });      
