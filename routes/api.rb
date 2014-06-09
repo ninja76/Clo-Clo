@@ -18,9 +18,10 @@ get '/create/:nodeID' do
   # Update Time stamp
   now = Time.now.to_f
   h = {} 
+  data = ""
   params.keys.each do |k|
    if k != "splat" and k != "captures" and k != "geo" and k != "nodeID"
-    h[params[k]] = k
+    data = data + "#{k}:#{params[k]}:"
    end
    if k == "geo" and params[k] == "yes"
      geo = JSON.parse(geolookup(request.ip))
@@ -29,10 +30,7 @@ get '/create/:nodeID' do
 #     puts "Inserting Geo Data #{geo["lat"]}, #{geo["long"]} "
    end
   end
-  h[now] = "updated"
-  my_a = h.to_a
-  puts my_a.inspect
-  $redis.zadd(params[:nodeID],my_a)
+  $redis.zadd(params[:nodeID],now,data)
   $redis.expire(params[:nodeID],86400)
   content_type :json
   return '{"result": "success"}' 
