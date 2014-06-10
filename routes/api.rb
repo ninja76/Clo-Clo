@@ -1,8 +1,8 @@
 # encoding: utf-8
 get '/follow/:nodeID' do
   content_type :json
-  result = $redis.hgetall(params[:nodeID])  
-  t_key = $redis.hget(params[:nodeID], "key")
+  result = $redis.zrange(params[:nodeID], 0, -1, withscores: true)
+  t_key = $redis.hget("key:#{params[:nodeID]}", "key")
   if t_key == params[:key]
     return result.to_json
   end
@@ -17,22 +17,18 @@ end
 get '/create/:nodeID' do
   # Update Time stamp
   now = Time.now.to_f
-  h = {} 
   data = ""
   params.keys.each do |k|
-   if k != "splat" and k != "captures" and k != "geo" and k != "nodeID"
-    data = data + "#{k}:#{params[k]}:"
-   end
-   if k == "geo" and params[k] == "yes"
-     geo = JSON.parse(geolookup(request.ip))
-#     $redis.hset(params[:nodeID], "latitude", geo["lat"])
-#     $redis.hset(params[:nodeID], "longitude", geo["long"])
-#     puts "Inserting Geo Data #{geo["lat"]}, #{geo["long"]} "
-   end
+    if k != "splat" and k != "captures" and k != "geo" and k != "nodeID" and k != "key"
+     data = data + "#{k}:#{params[k]}:"
+    end
+    if k == "key"
+      $redis.hset("key:#{params[:nodeID]}", "key", params[k])
+    end
   end
   $redis.zadd(params[:nodeID],now,data)
   $redis.expire(params[:nodeID],86400)
   content_type :json
-  return '{"result": "success"}' 
+  return "{\"result\": \"success\", \"created_at\": #{now}}" 
 end
 
