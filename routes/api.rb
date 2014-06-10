@@ -1,7 +1,7 @@
 # encoding: utf-8
 get '/follow/:nodeID' do
   content_type :json
-  result = $redis.zrange(params[:nodeID], 0, -1, withscores: true)
+  result = $redis.zrange(params[:nodeID], 1, -1, withscores: true)
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
   if t_key == params[:key]
     return result.to_json
