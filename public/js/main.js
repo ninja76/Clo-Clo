@@ -4,8 +4,9 @@ window.onload=function(){
       var email = $('#inputEmail').val()
       var username = $('#inputUsername').val()
       var password = $('#inputPassword').val()
-      var confirmpassword = $('#confirmPassword').val()
-      if (password != confirmpassword) {
+      var password2 = $('#confirmPassword').val()
+      console.log("WHAT " + password + " " + password2);
+      if (password != password2) {
         $("div.error").html('<div class="alert alert-warning">Passwords do not match</div>');
       } else {
         var formData = {username:username, email:email, password:password};
@@ -15,8 +16,7 @@ window.onload=function(){
 	    data : formData,
             success: function(response) {
               response = JSON.parse(response)
-              console.log(response);     
-              console.log(response.result);     
+              console.log("DERP");
               if (response.result == "fail") {
                 $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");       
 	      } else {
@@ -27,4 +27,23 @@ window.onload=function(){
         }
 
   });
+
+  $('#loginBtn').on('click', function () {
+    var username = $('#inputUsername').val()
+    var password = $('#inputPassword').val()
+    var formData = {username:username, password:password};    
+    $.ajax({
+          url: '/login/submit',
+            type: "POST",
+            data : formData,
+            success: function(response) {
+              response = JSON.parse(response)
+              if (response.result == "fail") {
+                $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");
+              } 
+            }
+    });
+
+  });
+
 }

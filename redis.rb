@@ -1,2 +1,2 @@
 # Enter Redis server info here
-$redis = Redis.new(:url => "redis://107.170.234.60:6379/15")
+$redis = Redis.new(:url => "redis://localhost:6379/15")

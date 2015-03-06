@@ -1,3 +1,10 @@
+post '/login/submit' do
+  username = params[:username]
+  password = params[:password]
+  return "{\"result\": \"fail\", \"error\": \"Invalid username/password\"}"
+end
+
+
 post '/register/submit' do
   username = params[:username]
   password = params[:password]
@@ -7,6 +14,9 @@ post '/register/submit' do
   if duplicate.count > 0
     return "{\"result\": \"fail\", \"error\": \"Username already in Use\"}"
   end 
+  if username == "" or password == "" or username.length < 4 or password.length < 4
+    return "{\"result\": \"fail\", \"error\": \"Invalid username/password\"}"
+  end
 #  duplicate = database["SELECT email FROM accounts WHERE email ='#{email}'"]
 #  if duplicate.count > 0
 #    return "{\"result\": \"fail\", \"error\": \"Email already registered\"}"

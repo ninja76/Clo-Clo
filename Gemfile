@@ -6,6 +6,7 @@ gem 'sinatra-assetpack'
 gem 'redis'
 gem 'sinatra-sequel'
 gem 'mysql'
+gem 'sqlite3'
 gem 'foreman'
 gem 'thin'
 
