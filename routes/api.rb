@@ -2,7 +2,7 @@
 get '/api/follow/:nodeID' do
   content_type :json
   result = $redis.zrange(params[:nodeID], 0, -1, withscores: true)
-  a = result.map{|s| { created_at: s[1], nodeID: params[:nodeID], content: s[0] } }
+  a = result.map{|s| { timestamp: s[1], data: s[0] } }
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
 
   if t_key == params[:key] || !t_key
@@ -19,7 +19,7 @@ end
 get '/api/last/:nodeID' do
   content_type :json
   result = $redis.zrange(params[:nodeID], 1, -1, withscores: true)
-  a = result.map{|s| { created_at: s[1], nodeID: params[:nodeID], content: s[0] } }
+  a = result.map{|s| { timestamp: s[1], data: s[0] } }
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
 
   if t_key == params[:key] || !t_key
@@ -43,6 +43,7 @@ get '/api/create/:nodeID' do
     return '{"result": "key required for this node"}'
   end
   params.keys.each do |k|
+
     if k != "splat" and k != "captures" and k != "geo" and k != "nodeID" and k != "key"
       data = data + "{#{k}: #{params[k]}},"
     end
