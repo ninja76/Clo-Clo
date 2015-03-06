@@ -1,11 +1,10 @@
-post '/login/submit' do
+post '/api/login/submit' do
   username = params[:username]
   password = params[:password]
   return "{\"result\": \"fail\", \"error\": \"Invalid username/password\"}"
 end
 
-
-post '/register/submit' do
+post '/api/register/submit' do
   username = params[:username]
   password = params[:password]
   #email = params[:email]

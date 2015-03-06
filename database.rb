@@ -5,13 +5,13 @@ require_relative 'config/database.rb'
 root = ::File.dirname(__FILE__)
 
 configure :development do
- #set :database, "sqlite:///#{root}/data/spice.db"
+ set :database, "sqlite:///#{root}/data/spice.db"
  #set :show_exceptions, true
 end
 
 configure :production do
 # set :database, URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
-#set :database, "sqlite:///#{root}/data/spice.db"
+set :database, "sqlite:///#{root}/data/spice.db"
 # set :show_exceptions, true
 end
 puts "the accounts table doesn't exist" if !database.table_exists?('accounts')
