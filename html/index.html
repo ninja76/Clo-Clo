@@ -108,19 +108,22 @@
             <h1 class="">How it Works</h1>
 
             <div class="row" style="text-align:left;">
-              <pre style="background-color:#7E8B8B;">
-<span class="label label-primary">create Syntax</span>
+              <pre style="background-color:#7E8B8B;color:#fff;">
+<span class="label label-primary">create syntax</span>
 <br>http://www.roxehub.com/api/create/nodeName?key1=value1&amp;key2=value2<br>Options: geo=yes will append Geo location data based on source IP to your post, key=will make this node private
-<span class="label label-primary">create Example</span> 
-<br>Ex. http://www.roxehub.com/api/create/co2_sensor_1?value=72&amp;key=yourapikey
-<br>Private Ex. http://www.roxehub.com/api/create/traffic_sensor?value=231&amp;key=123bd651
+<br>
+<span class="label label-primary">create xxample</span> 
+<br>http://www.roxehub.com/api/create/co2_sensor_1?value=72&amp;key=yourapikey
+<br>Private ex. http://www.roxehub.com/api/create/traffic_sensor?value=231&amp;key=123bd651
 </pre>
-              <pre style="background-color:#7E8B8B;">
-<span class="label label-primary">follow Syntax</span>
-<br>http://www.roxehub.com/follow/nodeName
-<span class="label label-primary">follow Example</span>
-<br>http://www.roxehub.com/api/follow/co2_sensor_1<br>Returns: {"created":"1401990420.459", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
-<br>Private ex. http://www.roxehub.com/api/follow/traffic_sensor?key=123bd651<br>Returns: {"created":"1401990420.149", "nodeID":"traffic_sensor", "content":{"value":"231"}}
+<br>
+<pre style="background-color:#7E8B8B;color:#fff;">
+<span class="label label-primary">stream syntax</span>
+<br>http://www.roxehub.com/stream/nodeName
+<br>
+<span class="label label-primary">stream example</span>
+<br>http://www.roxehub.com/api/stream/co2_sensor_1<br>Returns: {"created":"1401990420.459", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
+<br>Private ex. http://www.roxehub.com/api/stream/traffic_sensor?key=123bd651<br>Returns: {"created":"1401990420.149", "nodeID":"traffic_sensor", "content":{"value":"231"}}
 </pre>
             </div>
           </div>
@@ -227,7 +230,6 @@
               <div class="form-group">
                 <div class="col-lg-8 col-lg-offset-2">
                   <button class="btn btn-primary" id="loginBtn">Login</button><br>
-                  <i><a href="#register">Register</a></i>
                 </div>
               </div>
             </fieldset>

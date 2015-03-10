@@ -1,8 +1,8 @@
 # encoding: utf-8
-get '/api/follow/:nodeID' do
+get '/api/stream/:nodeID' do
   content_type :json
   result = $redis.zrange(params[:nodeID], 0, -1, withscores: true)
-  a = result.map{|s| { timestamp: s[1], data: s[0] } }
+  a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
 
   if t_key == params[:key] || !t_key
@@ -19,7 +19,7 @@ end
 get '/api/last/:nodeID' do
   content_type :json
   result = $redis.zrange(params[:nodeID], 1, -1, withscores: true)
-  a = result.map{|s| { timestamp: s[1], data: s[0] } }
+  a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
 
   if t_key == params[:key] || !t_key
@@ -35,7 +35,8 @@ end
 
 get '/api/create/:nodeID' do
   # Update Time stamp
-  now = Time.now.to_f
+  puts params[:nodeID]
+  now = Time.now.to_i
   data = "{"
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
   if t_key && t_key != params[:key]
@@ -45,6 +46,7 @@ get '/api/create/:nodeID' do
   params.keys.each do |k|
 
     if k != "splat" and k != "captures" and k != "geo" and k != "nodeID" and k != "key"
+      
       data = data + "{#{k}: #{params[k]}},"
     end
     if k == "key"
@@ -52,6 +54,8 @@ get '/api/create/:nodeID' do
     end
   end
   data = data.chop + "}"
+  data = data + ";;#{now}"
+  puts data
   $redis.zadd(params[:nodeID],now,data)
   $redis.expire(params[:nodeID],86400)
   content_type :json
