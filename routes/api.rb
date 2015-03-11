@@ -1,24 +1,7 @@
 # encoding: utf-8
-get '/api/stream/:nodeID' do
+get '/api/streams/:nodeID' do
   content_type :json
   result = $redis.zrange(params[:nodeID], 0, -1, withscores: true)
-  a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
-  t_key = $redis.hget("key:#{params[:nodeID]}", "key")
-
-  if t_key == params[:key] || !t_key
-    content_type :json
-    return a.to_json
-  end
-
-  if t_key != params[:key]
-    content_type :json
-    return '{"result": "denied"}'
-  end
-end
-
-get '/api/last/:nodeID' do
-  content_type :json
-  result = $redis.zrange(params[:nodeID], 1, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
   t_key = $redis.hget("key:#{params[:nodeID]}", "key")
 
@@ -46,8 +29,11 @@ get '/api/create/:nodeID' do
   params.keys.each do |k|
 
     if k != "splat" and k != "captures" and k != "geo" and k != "nodeID" and k != "key"
-      
-      data = data + "{#{k}: #{params[k]}},"
+      if k == "geo"
+        data = data + "{#{k}: #{geolookup(request.ip)}},"
+      else
+        data = data + "{#{k}: #{params[k]}},"
+      end
     end
     if k == "key"
       $redis.hset("key:#{params[:nodeID]}", "key", params[k])

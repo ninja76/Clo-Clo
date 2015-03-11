@@ -1,3 +1,10 @@
+def validateKey(proposedKey, streamUID)
+  if database[:accounts][:id => streamUID, :key => proposedKey]
+    return false
+  end
+  return true
+end
+
 def geolookup(ip)
   require 'open-uri'
   geo  = JSON.parse(open("http://freegeoip.net/json/#{ip}") {|f| f.read })

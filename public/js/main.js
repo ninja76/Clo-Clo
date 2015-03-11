@@ -5,7 +5,6 @@ window.onload=function(){
       var username = $('#inputUsername').val()
       var password = $('#inputPassword').val()
       var password2 = $('#confirmPassword').val()
-      console.log("WHAT " + password + " " + password2);
       if (password != password2) {
         $("div.error").html('<div class="alert alert-warning">Passwords do not match</div>');
       } else {
@@ -16,11 +15,10 @@ window.onload=function(){
 	    data : formData,
             success: function(response) {
               response = JSON.parse(response)
-              console.log("DERP");
               if (response.result == "fail") {
                 $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");       
 	      } else {
-                $("div.error").html('<div class="alert alert-success">Registration successful here is your key is '+response.key+'</div>');
+                $("div.error").html('<div class="alert alert-success">Registration successful.  Here is your API key '+response.key+'</div>');
 	      }
             }
           });      
