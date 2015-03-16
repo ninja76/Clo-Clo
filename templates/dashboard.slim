@@ -1,0 +1,19 @@
+section.home-section.bg-white
+  .container
+    .row
+      .col-md-offset-2.col-md-8
+        .section-heading
+          h1 Dashboard
+        h3 streams
+        table.table.table-striped
+          th stream id
+          th stream name
+          th last update 
+          th actions 
+          - for c in @streams
+            tr
+            <td>#{c[:id]}</td>
+            <td>#{c[:name]}</td>
+            <td>#{c[:updated_at]}</td>
+            <td>edit delete</td>
+     

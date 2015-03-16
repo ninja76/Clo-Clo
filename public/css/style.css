@@ -123,7 +123,7 @@ Home sections
 
 /* --- heading --- */
 .section-heading {
-	margin-bottom: 90px;
+	margin-bottom: 20px;
 }
 	
 .section-heading h2 {
@@ -182,7 +182,7 @@ Intro
 ================================= */
 
 #intro{
-    height:335px;
+    height:225px;
     width:100%;
     background-color: #6b0cb0;
 /*    background-image: url(../images/bg-mac.png);*/
@@ -198,19 +198,19 @@ Intro
 .intro-text {
 	position:relative;
 	width:100%;
-	margin-top:70px;
+	margin-top:0px;
 	z-index:1000;
 }
 #intro .brand {
-	margin-top: 40px;
+	margin-top: 30px;
 }
 .intro-text h1 a {
 	color:#fff;
 	text-align:center;
 	font-weight: 700;
-	font-size: 40px; 
-	line-height:1.1em;
-	padding-top:20px;
+	font-size: 50px; 
+	line-height:1.3em;
+	padding-top:40px;
 	text-transform: uppercase;	
 }
 .intro-text h1 a:hover {
@@ -227,7 +227,7 @@ Intro
 
 .intro-text p span {
 	color:#fff;
-	font-size: 24px;
+	font-size: 20px;
 	text-align:center;
 	font-weight: 300;
 }

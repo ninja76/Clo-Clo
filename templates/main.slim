@@ -1,28 +1,26 @@
-section#about.home-section.bg-white
+section#about.home-section.bg-white style="padding-top:45px;"
   .container
     .row
       .col-md-offset-2.col-md-8
         .section-heading
-          h2 What is Roxe?
-          p Roxe is an open data exchange hub that can be used to easily and securely exchange messages, e-commerce orders, etc. or share data between Internet of Things (IoT) nodes. 
-    .row style="text-align:left;" 
-      pre
-        span.label.label-primary create Syntax
-        p
-          | http://www.roxehub.com/create/&lt;nodeName&gt;?key1=value1&key2=value2
-          | <br>Options: geo=yes will append Geo location data based on source IP to your post, key=<key> will make this node private
-        span.label.label-primary create Example
-        p Ex. http://www.roxehub.com/create/co2_sensor_1?value=72
-        p Private Ex. http://www.roxehub.com/create/traffic_sensor?value=231&key=123bd651
-
-      pre
-        span.label.label-primary follow Syntax
-        p http://www.roxehub.com/follow/&lt;nodeName&gt;
-        span.label.label-primary follow Example
-        p
-          | http://www.roxehub.com/follow/co2_sensor_1
-          | <br>Returns: {"created":"1401990420.459", "nodeID":"co2_sensor_1", "content":{"value":"72"}}
-        p
-          | http://www.roxehub.com/follow/traffic_sensor?key=123bd651
-          | <br>Returns: {"created":"1401990420.149", "nodeID":"traffic_sensor", "content":{"value":"231"}}
-
+          h2 What is Clo Clo?
+          p Clo Clo is a FREE service that provides an easy way to send, receive and interact with data from any Internet enabled device. For example you
+            could have your smart outlet follow the stream from your light sensor outside and when it gets dark out your smart outlet can turn the lamp on! Have
+            your servers update their status to your customers, send the temperature of a public pool for people to see. The possiblities are endless!!
+section#started.home-section.bg-white
+  .container
+    .row
+      .col-md-offset-2.col-md-8
+        .section-heading
+          h2 Getting Started
+        pre style="text-align:left;"
+          ol
+            li Register to get your API key
+            li Create your first stream: 
+               http://www.clo-clo.net/api/create?key=your_api_key&name=name_of_stream
+            li The call will return something like this: 
+               {"result": "success", "stream_id": "2", "created_at": 1426190920} Note the stream_id
+            li Push data to your stream: 
+               http://www.clo-clo.net/api/update?stream_id=stream_id_from_step_2&key=your_api_key&value1=value
+            li Pull data from your stream:
+               http://www.clo-clo.net/api/streams?stream_id=stream_id_from_step_2

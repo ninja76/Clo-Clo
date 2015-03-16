@@ -1,6 +1,13 @@
+
 post '/login/submit' do
   username = params[:username]
   password = params[:password]
+  is_valid = database[:accounts][:account_name => username, :password => password]
+  puts is_valid.inspect
+  if is_valid
+    session[:user_id] = is_valid[:id] #username
+    return "{\"result\": \"success\"}"
+  end 
   return "{\"result\": \"fail\", \"error\": \"Invalid username/password\"}"
 end
 
@@ -25,5 +32,8 @@ post '/register/submit' do
 #  end
   key = KeyGenerator.generate
   database[:accounts].insert(:account_name => username, :password => password, :email => email, :key => key, :created_at => Time.now)
+
+  session[:user_id] = username
+
   return "{\"result\": \"ok\", \"key\": \"#{key}\"}"
 end

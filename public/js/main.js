@@ -1,3 +1,11 @@
+(function ($) {
+        $( '#dl-menu' ).dlmenu();
+        $('ul.dl-menu li a').smoothScroll();
+        //animation
+        new WOW().init();
+
+})(jQuery);
+
 window.onload=function(){
 
   $('#registerBtn').on('click', function () {
@@ -23,7 +31,6 @@ window.onload=function(){
             }
           });      
         }
-
   });
 
   $('#loginBtn').on('click', function () {
@@ -38,7 +45,10 @@ window.onload=function(){
               response = JSON.parse(response)
               if (response.result == "fail") {
                 $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");
-              } 
+              } else {
+                window.location.href = "/dashboard";
+              }
+               
             }
     });
 

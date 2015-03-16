@@ -1,6 +1,6 @@
 FROM base
 
-MAINTAINER roxe "https://github.com/roxe"
+MAINTAINER roxe "https://github.com/ninja76/roxehub
 
 # Install packages for building ruby
 RUN apt-get update
@@ -15,11 +15,11 @@ RUN cd /root/src/ruby-2.1.0; ./configure; make install
 RUN gem update --system
 RUN gem install bundler
 RUN gem install rack
-RUN git clone https://github.com/roxe/roxehub /root/roxehub
-RUN cd /root/roxehub; bundle install
-RUN echo 'ENV["DATABASE_URL"] = "mysql://user/password@mysqlhost:3306/spice"' > /root/roxehub/.env.rb
+RUN git clone https://github.com/roxe/roxehub /opt/roxehub
+RUN cd /opt/roxehub; bundle install
+RUN echo 'ENV["DATABASE_URL"] = "mysql://user/password@mysqlhost:3306/spice"' > /opt/roxehub/.env.rb
 EXPOSE 4567
-CMD ["/usr/local/bin/foreman","start","-d","/root/roxehub"]
+CMD ["/usr/local/bin/foreman","start","-d","/opt/roxehub"]
 
 
 

@@ -1,11 +1,16 @@
 get '/api/create' do
-  uid    = params[:uid]
   key    = params[:key]
   name   = params[:name]
   desc   = params[:desc]
   public = params[:public]
 
-  stream_id = database[:streams].insert(:account_uid => uid, :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
+  user_meta = database[:accounts][:key => key]
+  if !user_meta
+    content_type :json
+    return '{"result": "failed", "message": "invalid key"}'
+  end
+
+  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
   content_type :json
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
 end
@@ -25,7 +30,7 @@ get '/api/streams' do
 
   if streamMeta[:public] == 1 && validateKey(params[:key], streamID)
     content_type :json
-    return '{"result": "denied"}'
+    return '{"result": "failed", "message": "invalid key"}'
   end
 end
 
@@ -40,7 +45,7 @@ get '/api/update' do
 
   if !actualKey 
     content_type :json
-    return '{"result": "key required for this node"}'
+    return '{"result": "failed", "message": "key required for this node"}'
   end
 
   data = "{"
@@ -48,13 +53,15 @@ get '/api/update' do
     if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id"
       data = data + "{#{k}: #{params[k]}},"
     end
-    $redis.hset("key:#{params[:streamID]}", "key", params[k])
   end
   data = data.chop + "}"
   data = data + ";;#{now}"
-  puts data
   $redis.zadd(params[:streamID],now,data)
   $redis.expire(params[:streamID],86400)
+
+  # Update stream last update field
+  database[:streams].where(:id => streamID).update(:updated_at => now);
+
   content_type :json
   return "{\"result\": \"success\", \"created_at\": #{now}}"
 end
