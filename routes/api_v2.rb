@@ -22,7 +22,7 @@ get '/api/streams' do
    
   result = $redis.zrange(params[:streamID], 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
-
+  
   if streamMeta[:public] == 0
     content_type :json
     return a.to_json
@@ -33,6 +33,7 @@ get '/api/streams' do
     return '{"result": "failed", "message": "invalid key"}'
   end
 end
+
 
 get '/api/update' do
  streamID = params[:stream_id]
@@ -48,13 +49,13 @@ get '/api/update' do
     return '{"result": "failed", "message": "key required for this node"}'
   end
 
-  data = "{"
+  data = ""
   params.keys.each do |k|
     if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id"
-      data = data + "{#{k}: #{params[k]}},"
+      data = data + "#{k}: #{params[k]},"
     end
   end
-  data = data.chop + "}"
+  data = data.chop
   data = data + ";;#{now}"
   $redis.zadd(params[:streamID],now,data)
   $redis.expire(params[:streamID],86400)
@@ -65,3 +66,43 @@ get '/api/update' do
   content_type :json
   return "{\"result\": \"success\", \"created_at\": #{now}}"
 end
+
+get '/api/chart_data' do
+
+  @streams = database[:streams].filter(:public => 0)
+
+  result = $redis.zrange(params[@streams[:id]], 0, -1, withscores: true)
+  a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
+
+  series = result.map{|s| s[0].split(';;')[0] }
+
+  series_count = series[0].split(',').count
+  
+  series_data_array = Array.new
+  series_data_array.push(Array.new)
+  series_data_array.push(Array.new)
+
+  # Get data labels and push them to array spot 1 and create a new array for each data point
+  series[0].split(',').each do |s|
+    series_data_array.push(Array.new)
+    series_data_array[1].push(s.split(': ')[0])
+  end
+
+  # Get Time Series Data and push array spot 0
+  series_ts = result.map{|s| s[1]} 
+  series_ts.each do |s|
+    series_data_array[0].push(s)
+  end
+
+  series.each do |item|
+    s_count = 2
+    item.split(',').each do |key|
+      series_data_array[s_count].push(key.split(': ')[1])
+      s_count = s_count+1
+    end
+  end
+  
+  puts series_data_array.to_json.inspect
+  return series_data_array.to_json
+end
+

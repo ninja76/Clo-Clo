@@ -9,3 +9,9 @@
     end
   end
 
+  get '/streams' do
+  @streams = database[:streams].filter(:public => 0)
+
+  slim :streams_public, :layout => :layout_streams
+  end
+
