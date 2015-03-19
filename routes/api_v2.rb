@@ -69,7 +69,7 @@ end
 
 get '/api/chart_data' do
 
-  @streams = database[:streams].filter(:public => 0)
+  @streams = database[:streams].filter(:public => 0, :id => params[:stream_id])
 
   result = $redis.zrange(params[@streams[:id]], 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
@@ -102,7 +102,6 @@ get '/api/chart_data' do
     end
   end
   
-  puts series_data_array.to_json.inspect
   return series_data_array.to_json
 end
 

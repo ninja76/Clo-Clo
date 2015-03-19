@@ -4,5 +4,17 @@ section.home-section.bg-white
       .col-md-offset-2.col-md-8
         .section-heading
           h1 Public Streams
+        h3 streams
+        .col-xs-6.col-sm-6.bg-primary style="margin-bottom:35px;color:#fff;"
+          h4 style="color:#fff;" Stream Name
+        .col-xs-6.col-sm-6.bg-primary style="margin-bottom:35px;color:#fff;"
+          h4 style="color:#fff;" Last Update 
+        .row
+        - for c in @formatted_streams
+          .col-xs-6.col-sm-6 style="margin-bottom:25px;"
+            a href="/streams/detail?stream_id=#{c[:id]}"
+              h5 #{c[:name]}
+          .col-xs-6.col-sm-6 style="margin-bottom:25px;"
+            h5 #{c[:updated_at]} ago
+          .row
 
-    #streams

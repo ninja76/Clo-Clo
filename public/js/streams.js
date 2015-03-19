@@ -1,7 +1,6 @@
 window.onload = function() {
 
 function drawCharts() {
-            console.log("drp");
             $.ajax({
                 url: '/api/chart_data',
                 type: "GET",
@@ -12,11 +11,9 @@ function drawCharts() {
                             $('<div/>', {
                                 'class': '',
                                 'id': "myChart" + i,
-                                'style': 'margin-bottom:200px;'
+                                'style': 'margin-bottom:50px;width:100%;'
                             })
-                            .width(800)
                             .height(200);
-                        console.log(response[1]);
                         $('#streams').append(newCanvas);
                         var data = new google.visualization.DataTable();
                         data.addColumn('datetime', 'Time');
@@ -29,7 +26,6 @@ function drawCharts() {
                         // Set chart options
                         var options = {
                             'title': response[1][i-2],
-                            'width': 800,
                             'height': 200
                         };
 
@@ -39,7 +35,6 @@ function drawCharts() {
                     }
                 }
             });
-
         };
         setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 1000);
 }
