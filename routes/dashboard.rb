@@ -9,17 +9,15 @@
 
   get '/streams/public' do
   @formatted_streams = []
-  @streams = database[:streams].filter(:public => 0)
-  
-  now = Time.now.to_i 
+  now = Time.now.to_i
   ftime = ""
-  @streams.each do |s|
-    puts s.inspect
+
+  streams = database[:streams].filter(:public => 0)
+
+  streams.each do |s|
     if s[:updated_at]
       ftime = time_diff(s[:updated_at], now)
-      s[:updated_at] = ftime
-      @formatted_streams << {:id=>2, :account_uid=>1, :public=>0, :name=>"Des Moines, IA Weather", :description=>nil, :updated_at=>ftime}
-      puts ftime
+      @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>ftime}
     end
   end
   slim :streams_public
@@ -27,10 +25,12 @@
 
 
   get '/streams/detail' do
-    @stream_id = params[:stream_id]
-
+    @stream_meta = database[:streams][:id => params[:stream_id]]
+    puts "**** #{@stream_meta.inspect}"
     slim :streams_detail, :layout => :layout_streams
   end
+
+
 
   def time_diff(start_time, end_time)
     seconds_diff = (start_time - end_time).to_i.abs

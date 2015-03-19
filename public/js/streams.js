@@ -2,7 +2,7 @@ window.onload = function() {
 
 function drawCharts() {
             $.ajax({
-                url: '/api/chart_data',
+                url: '/api/chart_data?stream_id='+$('#streamID').val(),
                 type: "GET",
                 success: function(response) {
                     response = JSON.parse(response);
