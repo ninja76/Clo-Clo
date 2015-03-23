@@ -1,5 +1,5 @@
-Roxe Hub
+Clo Clo
 ==============
-Roxehub is an open source communications hub for IoT (Internet of Things) devices to collect, analyze, and exchange data.
+An open cloud based data exchange platform for the Internet of Things!
 
-http://www.roxehub.com
+http://www.clo-clo.net
