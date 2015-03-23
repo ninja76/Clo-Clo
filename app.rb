@@ -7,7 +7,7 @@ require 'slim'
 require 'sequel'
 require 'redis'
 require './database'
-require './redis'
+require './config/redis'
 
 Sinatra::Application.register Sinatra::AssetPack
 
