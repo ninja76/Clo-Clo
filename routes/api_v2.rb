@@ -19,10 +19,8 @@ end
 get '/api/streams' do
   streamID = params[:stream_id]
   streamMeta = database[:streams][:id => streamID]
-   
   result = $redis.zrange(streamID, 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
-  
   if streamMeta[:public] == 0
     content_type :json
     return a.to_json
@@ -85,27 +83,25 @@ get '/api/chart_data' do
     series_data_array.push(Array.new)
     series_data_array[1].push(s.split(': ')[0])
   end
-
+  now = Time.now.to_i
+  p_count = 0
   # Get Time Series Data and push array spot 0
   series_ts = result.map{|s| s[1]} 
   series_ts.each do |s|
-    if s > Time.now.to_i - last24
+    if s > now - last24
+      p_count = p_count+1
       series_data_array[0].push(s)
     end
   end
 
-  series.each do |item|
+  series.last(series_data_array[0].length).each do |item|
     s_count = 2
-    t_count = 0
     item.split(',').each do |key|
-     if series_data_array[0][t_count] > Time.now.to_i - last24
-        series_data_array[s_count].push(key.split(': ')[1])
-     end
+      series_data_array[s_count].push(key.split(': ')[1])
       s_count = s_count+1
-      t_count = t_count+1
     end
   end
-  
+
   return series_data_array.to_json
 end
 
