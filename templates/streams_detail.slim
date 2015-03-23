@@ -5,5 +5,7 @@ section.home-section.bg-white
         .section-heading
           h2 #{@stream_meta[:name]}
           h4 #{@stream_meta[:description]}
+          h5 Last 24 hours
+          
     #streams.col-md-11
     input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" /

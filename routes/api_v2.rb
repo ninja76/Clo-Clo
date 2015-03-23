@@ -20,7 +20,7 @@ get '/api/streams' do
   streamID = params[:stream_id]
   streamMeta = database[:streams][:id => streamID]
    
-  result = $redis.zrange(params[:streamID], 0, -1, withscores: true)
+  result = $redis.zrange(streamID, 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
   
   if streamMeta[:public] == 0
@@ -34,9 +34,8 @@ get '/api/streams' do
   end
 end
 
-
 get '/api/update' do
- streamID = params[:stream_id]
+  streamID = params[:stream_id]
   # Update Time stamp
   now = Time.now.to_i
 
@@ -57,8 +56,8 @@ get '/api/update' do
   end
   data = data.chop
   data = data + ";;#{now}"
-  $redis.zadd(params[:streamID],now,data)
-  $redis.expire(params[:streamID],86400)
+  $redis.zadd(streamID,now,data)
+  $redis.expire(streamID,86400)
 
   # Update stream last update field
   database[:streams].where(:id => streamID).update(:updated_at => now);
@@ -67,16 +66,15 @@ get '/api/update' do
   return "{\"result\": \"success\", \"created_at\": #{now}}"
 end
 
+
 get '/api/chart_data' do
-
-  @streams = database[:streams].filter(:id => params[:stream_id])
-
-  result = $redis.zrange(params[@streams[:id]], 0, -1, withscores: true)
+  ## Returns last 24 hours of data
+  last24 = 86400;
+  @streams = database[:streams][:id => params[:stream_id]]
+  result = $redis.zrange(@streams[:id], 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
 
   series = result.map{|s| s[0].split(';;')[0] }
-
-  series_count = series[0].split(',').count
   
   series_data_array = Array.new
   series_data_array.push(Array.new)
@@ -91,14 +89,20 @@ get '/api/chart_data' do
   # Get Time Series Data and push array spot 0
   series_ts = result.map{|s| s[1]} 
   series_ts.each do |s|
-    series_data_array[0].push(s)
+    if s > Time.now.to_i - last24
+      series_data_array[0].push(s)
+    end
   end
 
   series.each do |item|
     s_count = 2
+    t_count = 0
     item.split(',').each do |key|
-      series_data_array[s_count].push(key.split(': ')[1])
+     if series_data_array[0][t_count] > Time.now.to_i - last24
+        series_data_array[s_count].push(key.split(': ')[1])
+     end
       s_count = s_count+1
+      t_count = t_count+1
     end
   end
   
