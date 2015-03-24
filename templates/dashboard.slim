@@ -6,14 +6,14 @@ section.home-section.bg-white
           h1 Dashboard
         h3 streams
         table.table.table-striped
-          th stream id
-          th stream name
-          th last update 
-          th actions 
-          - for c in @streams
+          th.text-center Id
+          th.text-center  Name
+          th.text-center Last Update 
+          th.text-center Actions 
+          - for c in @formatted_streams
             tr
             <td>#{c[:id]}</td>
             <td>#{c[:name]}</td>
-            <td>#{c[:updated_at]}</td>
+            <td>#{c[:updated_at]} ago</td>
             <td>edit delete</td>
      

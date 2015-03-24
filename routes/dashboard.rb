@@ -1,6 +1,12 @@
   get '/dashboard' do
+    @formatted_streams = []
     if session[:user_id]
-      @streams = database[:streams].filter(:account_uid => session[:user_id])
+      streams = database[:streams].filter(:account_uid => session[:user_id])
+      streams.each do |s|
+        if s[:updated_at]
+          @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
+        end
+      end
       slim :dashboard
     else
       redirect '/login'
@@ -9,15 +15,10 @@
 
   get '/streams/public' do
   @formatted_streams = []
-  now = Time.now.to_i
-  ftime = ""
-
   streams = database[:streams].filter(:public => 0)
-
   streams.each do |s|
     if s[:updated_at]
-      ftime = time_diff(s[:updated_at], now)
-      @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>ftime}
+      @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
     end
   end
   slim :streams_public
@@ -32,7 +33,8 @@
 
 
 
-  def time_diff(start_time, end_time)
+  def time_diff(start_time)
+    end_time = Time.now.to_i
     seconds_diff = (start_time - end_time).to_i.abs
 
     hours = seconds_diff / 3600

@@ -66,14 +66,19 @@ end
 
 
 get '/api/chart_data' do
-  ## Returns last 24 hours of data
-  last24 = 86400;
+  ## By default return the  last 24 hours of data
+  ## If the timeframe parameter is entered (in seconds ex. 86400 = 24 hours) set the time frame to that value
+  ##
+  if params[:timeframe]
+    timerange = params[:timeframe].to_i
+  else
+    timerange = 86400
+  end
   @streams = database[:streams][:id => params[:stream_id]]
   result = $redis.zrange(@streams[:id], 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
 
   series = result.map{|s| s[0].split(';;')[0] }
-  
   series_data_array = Array.new
   series_data_array.push(Array.new)
   series_data_array.push(Array.new)
@@ -84,16 +89,17 @@ get '/api/chart_data' do
     series_data_array[1].push(s.split(': ')[0])
   end
   now = Time.now.to_i
-  p_count = 0
   # Get Time Series Data and push array spot 0
   series_ts = result.map{|s| s[1]} 
+
+  # Go over each timstamp and only keep the ones that fall into the timeframe
   series_ts.each do |s|
-    if s > now - last24
-      p_count = p_count+1
+    if s > now - timerange
       series_data_array[0].push(s)
     end
   end
-
+  puts "Sending only the last #{series_data_array[0].length} records"
+  # truncate the actual data to the last x number of records in the timestamp array
   series.last(series_data_array[0].length).each do |item|
     s_count = 2
     item.split(',').each do |key|
