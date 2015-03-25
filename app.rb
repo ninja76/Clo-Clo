@@ -14,6 +14,7 @@ Sinatra::Application.register Sinatra::AssetPack
 class MyApp < Sinatra::Application
   enable :sessions
 
+  use Rack::Session::Cookie, :expire_after => 60*60*3, :secret => 'summeriscoolerthenwinter'
   register Sinatra::AssetPack
   enable :inline_templates
   assets do

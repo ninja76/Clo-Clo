@@ -5,7 +5,17 @@ section.home-section.bg-white
         .section-heading
           h2 #{@stream_meta[:name]}
           h4 #{@stream_meta[:description]}
-          h5 Last 24 hours
           
+    .form-group
+      label for="stream_name"  Name of Stream
+      input#stream_name.form-control placeholder=("#{@stream_meta[:name]}") type="text" /
+    .form-group
+      label for="stream_desc"  Description
+      input#stream_desc.form-control placeholder="#{@stream_meta[:desc]}" type="text" /
+
+    .btn-group.pull-right
+      button.btn.btn-danger.btn-delete type="button"  Delete
+      button.btn.btn-danger.btn-update type="button"  Update 
+
     #streams.col-md-11
-    input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" /
+    input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" 

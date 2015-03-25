@@ -1,4 +1,7 @@
-get '/api/create' do
+##
+## Create New Stream
+##
+post '/api/streams' do
   key    = params[:key]
   name   = params[:name]
   desc   = params[:desc]
@@ -15,7 +18,9 @@ get '/api/create' do
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
 end
 
-
+##
+##  Get Stream Data
+##
 get '/api/streams' do
   streamID = params[:stream_id]
   streamMeta = database[:streams][:id => streamID]
@@ -32,7 +37,10 @@ get '/api/streams' do
   end
 end
 
-get '/api/update' do
+##
+##  Update a Stream
+##
+put '/api/update' do
   streamID = params[:stream_id]
   # Update Time stamp
   now = Time.now.to_i
