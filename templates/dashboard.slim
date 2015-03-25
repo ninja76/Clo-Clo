@@ -9,11 +9,9 @@ section.home-section.bg-white
           th.text-center Id
           th.text-center  Name
           th.text-center Last Update 
-          th.text-center Actions 
           - for c in @formatted_streams
             tr
             <td>#{c[:id]}</td>
-            <td>#{c[:name]}</td>
+            <td><a href="/dashboard/detail?stream_id=#{c[:id]}">#{c[:name]}</a></td>
             <td>#{c[:updated_at]} ago</td>
-            <td>edit delete</td>
      

@@ -13,6 +13,15 @@
     end
   end
 
+  get '/dashboard/detail' do
+    if session[:user_id]
+      @stream_meta = database[:streams][:id => params[:stream_id]]
+      slim :dashboard_streams_detail, :layout => :layout_streams
+    else
+      redirect '/login'
+    end
+  end
+
   get '/streams/public' do
   @formatted_streams = []
   streams = database[:streams].filter(:public => 0)
@@ -27,8 +36,7 @@
 
   get '/streams/detail' do
     @stream_meta = database[:streams][:id => params[:stream_id]]
-    puts "**** #{@stream_meta.inspect}"
-    slim :streams_detail, :layout => :layout_streams
+    slim :streams_detail_public, :layout => :layout_streams
   end
 
 

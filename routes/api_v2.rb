@@ -84,6 +84,11 @@ get '/api/chart_data' do
   series_data_array.push(Array.new)
 
   # Get data labels and push them to array spot 1 and create a new array for each data point
+  if !series[0]
+    content_type :json
+    return "{\"result\": \"error\", \"message\": \"no data found \"}"    
+  end
+
   series[0].split(',').each do |s|
     series_data_array.push(Array.new)
     series_data_array[1].push(s.split(': ')[0])

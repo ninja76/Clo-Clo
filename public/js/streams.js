@@ -5,6 +5,11 @@ function drawCharts() {
                 url: '/api/chart_data?stream_id='+$('#streamID').val(),
                 type: "GET",
                 success: function(response) {
+                    if (response.result == "error")
+                    {
+                      $('#streams').append("<div style='text-align:center;'><h2>No data found</h2>");
+                      return;
+                    }
                     response = JSON.parse(response);
                     for (i = 2; i < response.length; i++) {
                         var newCanvas =
