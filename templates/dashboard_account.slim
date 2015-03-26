@@ -1,0 +1,13 @@
+section.home-section.bg-white
+  .container
+    .row
+      .col-md-offset-2.col-md-8
+        .section-heading
+          h2 Account
+        | Welcome #{@user_meta[:account_name]}          
+        .row
+          h4 API Keys
+          table.table.table-striped
+          th.text-center Key 
+        .row
+          button.btn.btn-primary#btn-update-user type="button" Update

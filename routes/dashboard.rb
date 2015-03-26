@@ -1,6 +1,15 @@
+  get '/dashboard/account' do
+    @isloggedin = isLoggedIn(session)
+    if @isLoggedin == false
+      redirect '/login'
+    end
+    @user_meta = database[:accounts][:id => session[:user_id]]
+    slim :dashboard_account
+  end
+
   get '/dashboard' do
-  @isloggedin = isLoggedIn(session)  
-  @formatted_streams = []
+    @isloggedin = isLoggedIn(session)  
+    @formatted_streams = []
     if session[:user_id]
       streams = database[:streams].filter(:account_uid => session[:user_id])
       streams.each do |s|
@@ -25,15 +34,15 @@
   end
 
   get '/streams/public' do
-  @isloggedin = isLoggedIn(session)
-  @formatted_streams = []
-  streams = database[:streams].filter(:public => 0)
-  streams.each do |s|
-    if s[:updated_at]
-      @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
+    @isloggedin = isLoggedIn(session)
+    @formatted_streams = []
+    streams = database[:streams].filter(:public => 0)
+    streams.each do |s|
+      if s[:updated_at]
+        @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
+      end
     end
-  end
-  slim :public_streams
+    slim :public_streams
   end
 
 

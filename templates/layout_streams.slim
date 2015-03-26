@@ -33,6 +33,9 @@ html
                   a href="/streams/public" Public Streams
           - if @isloggedin
             ul.nav.navbar-nav.pull-right
+              li.active
+                a href="/dashboard/account"
+                  glyphicon.glyphicon-user.glyphicon-white
               li
                 a href="/logout"  Sign Out
           - else
