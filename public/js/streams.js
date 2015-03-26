@@ -42,4 +42,7 @@ function drawCharts() {
             });
         };
         setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 1000);
+   $(window).resize(function(){
+        drawCharts();
+    });
 }

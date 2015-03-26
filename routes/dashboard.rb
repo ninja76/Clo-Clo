@@ -33,14 +33,14 @@
       @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
     end
   end
-  slim :streams_public
+  slim :public_streams
   end
 
 
   get '/streams/detail' do
     @isloggedin = isLoggedIn(session)
     @stream_meta = database[:streams][:id => params[:stream_id]]
-    slim :streams_detail_public, :layout => :layout_streams
+    slim :public_streams_detail, :layout => :layout_streams
   end
 
 
