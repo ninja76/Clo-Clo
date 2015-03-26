@@ -1,3 +1,11 @@
+def isLoggedIn(session)
+  if session[:user_id]
+    return true
+  else
+    return false
+  end
+end
+
 def validateKey(proposedKey, streamUID)
   if database[:accounts][:id => streamUID, :key => proposedKey]
     return false

@@ -1,16 +1,40 @@
 # encoding: utf-8
+##
+##
+##
   get '/index' do
+    @isloggedin = isLoggedIn(session)
     slim :main
   end
 
+##
+##
+##
   get '/' do
     redirect "/index"
   end
 
+##
+##
+##
   get '/login' do
+    if isLoggedIn(session)
+      redirect '/dashboard'
+    end
     slim :login
   end
 
+##
+##
+##
+  get '/logout' do
+    session.clear
+    redirect '/'
+  end
+
+##
+##  
+##
   get '/register' do
     slim :register
   end

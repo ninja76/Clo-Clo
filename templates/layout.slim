@@ -15,19 +15,34 @@ html
         .navbar-header
           a.navbar-brand style="color:#fff;"  href="/"  Clo Clo
         div
-          ul.nav.navbar-nav
+          ul.nav.navbar-nav.pull-left
             li.active
               a href="/"  Home 
-            li
-              a href="/streams/public" Public Streams
-            li
-              a href="/login"  Login
-            li
-              a href="/register"  Register 
+            li.dropdown
+              a.dropdown-toggle aria-expanded="false" data-toggle="dropdown" href="#" role="button" 
+                | Streams
+                span.caret
+              ul.dropdown-menu role="menu" 
+                - if @isloggedin
+                  li
+                    a href="/dashboard" My Streams 
+                li
+                  a href="#"  Watched Streams 
+                li
+                  a href="/streams/public" Public Streams
 
+          - if @isloggedin
+            ul.nav.navbar-nav.pull-right
+              li
+                a href="/logout"  Sign Out
+          - else
+            ul.nav.navbar-nav.pull-right
+              li
+                a href="/login"  Login
+              li
+                a href="/register" Register
     == yield
     /! js
     script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" 
     script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
     script src="/js/main.js" 
-

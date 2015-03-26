@@ -8,14 +8,15 @@ section.home-section.bg-white
           
     .form-group
       label for="stream_name"  Name of Stream
-      input#stream_name.form-control placeholder=("#{@stream_meta[:name]}") type="text" /
+      input#stream_name.form-control placeholder="#{@stream_meta[:name]}" type="text" /
     .form-group
       label for="stream_desc"  Description
       input#stream_desc.form-control placeholder="#{@stream_meta[:desc]}" type="text" /
 
-    .btn-group.pull-right
-      button.btn.btn-danger.btn-delete type="button"  Delete
-      button.btn.btn-danger.btn-update type="button"  Update 
+    .form-group
+      button.btn.btn-primary.btn-update.pull-left style="margin-right:15px;" type="button" Update
+      button.btn-md.btn-danger.btn-purge.pull-right style="margin-right:15px;" type="button" Purge Data
+      button.btn-md.btn-warning.btn-remove.pull-right style="margin-right:15px;" type="button" Remove Stream
 
     #streams.col-md-11
     input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" 

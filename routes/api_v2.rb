@@ -21,8 +21,7 @@ end
 ##
 ##  Get Stream Data
 ##
-get '/api/streams' do
-  streamID = params[:stream_id]
+get '/api/streams/:streamID' do
   streamMeta = database[:streams][:id => streamID]
   result = $redis.zrange(streamID, 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
@@ -38,9 +37,45 @@ get '/api/streams' do
 end
 
 ##
-##  Update a Stream
+## Update a Stream New Skool
 ##
-put '/api/update' do
+put '/api/streams/:streamID' do
+  streamID = params[:streamID]
+  now = Time.now.to_i
+  payload =  JSON.parse(request.body.read)
+  streamMeta = database[:streams][:id => streamID]
+  proposedKey = payload['key']
+  actualKey = database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
+
+  if !actualKey
+    content_type :json
+    return '{"result": "failed", "message": "key required for this node"}'
+  end
+
+  data = ""
+  payload.each do |k, v| 
+    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id"
+      data = data + "#{k}: #{v},"
+    end
+  end
+  data = data.chop
+  data = data + ";;#{now}"
+  $redis.zadd(streamID,now,data)
+  $redis.expire(streamID,86400)
+
+  # Update stream last update field
+  database[:streams].where(:id => streamID).update(:updated_at => now);
+
+  puts "Updating #{streamID} with #{data}"
+
+  content_type :json
+  return "{\"result\": \"success\", \"created_at\": #{now}}"
+end
+
+##
+##  Update a Stream Legacy
+##
+get '/api/update' do
   streamID = params[:stream_id]
   # Update Time stamp
   now = Time.now.to_i
