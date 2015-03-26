@@ -1,14 +1,14 @@
 Clo Clo
-==============
-Features
 ==
+Features
+===
 
 RESTful API provides a structured and simple way to interact with Clo Clo data streams.
 Built on a custom time series storage system the merges the speed of Redis with the scalability of MySQL.
 An easy to use dashboard that allows you to manage your streams.
 
 GETTING STARTED
-==
+===
 
 1. Register to get your API key
 
