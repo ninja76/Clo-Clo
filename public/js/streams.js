@@ -1,5 +1,19 @@
 window.onload = function() {
 
+  $('#btn-update').on('click', function () {
+    var name = $('#stream_name').val()
+    var desc = $('#stream_desc').val()
+    var stream_id = $('#streamID').val()
+    var formData = {name:name, desc:desc};
+    $.ajax({
+          url: '/dashboard/update/'+stream_id,
+            type: "POST",
+            data : formData,
+            success: function(response) {
+            }
+    });
+  });
+
 function drawCharts() {
             $.ajax({
                 url: '/api/chart_data?stream_id='+$('#streamID').val(),
@@ -41,7 +55,7 @@ function drawCharts() {
                 }
             });
         };
-        setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 1000);
+        setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 200);
    $(window).resize(function(){
         drawCharts();
     });

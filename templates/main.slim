@@ -4,9 +4,16 @@ section#about.home-section.bg-white style="padding-top:45px;"
       .col-md-offset-2.col-md-8
         .section-heading
           h2 What is Clo Clo?
-          p Clo Clo is a FREE service that provides an easy way to send, receive and interact with data from any Internet enabled device. For example you
-            could have your smart outlet follow the stream from your light sensor outside and when it gets dark out your smart outlet can turn the lamp on! Have
-            your servers update their status to your customers, send the temperature of a public pool for people to see. The possiblities are endless!!
+          h5 align="left" Clo Clo is a cloud service that provides an easy way to send, receive and interact with data from any Internet enabled device.
+
+          h4 Features
+          ul align="left"
+            li RESTful API provides a structured and simple way to interact with Clo Clo data streams.
+            li Built on a custom time series storage system the merges the speed of Redis with the scalability of MySQL.
+            li An easy to use dashboard that allows you to manage your streams.
+
+          h5 Checkout the project here <a href="https://github.com/ninja76/Clo-Clo.git">Github</a>
+
 section#started.home-section.bg-white
   .container
     .row
@@ -17,10 +24,10 @@ section#started.home-section.bg-white
           ol
             li Register to get your API key
             li Create your first stream: 
-               http://www.clo-clo.net/api/create?key=your_api_key&name=name_of_stream
+               curl -X POST -d key=[your_api_key] name=myStream description=myDescription
             li The call will return something like this: 
                {"result": "success", "stream_id": "2", "created_at": 1426190920} Note the stream_id
             li Push data to your stream: 
-               http://www.clo-clo.net/api/update?stream_id=stream_id_from_step_2&key=your_api_key&value1=value
+               curl -X PUT -d key=[your_api_key] arg1=val1 arg2=val2 http://www.clo-clo.net/api/update/[stream_id]
             li Pull data from your stream:
-               http://www.clo-clo.net/api/streams?stream_id=stream_id_from_step_2
+               curl http://www.clo-clo.net/api/streams/[stream_id]
