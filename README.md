@@ -19,4 +19,6 @@ curl -X PUT -d key=[your_api_key] arg1=val1 arg2=val2 http://www.clo-clo.net/api
 4. Pull data from your stream:
 curl http://www.clo-clo.net/api/streams/[stream_id]
 
+## Try it now!
+
 http://www.clo-clo.net
