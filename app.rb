@@ -25,7 +25,7 @@ class MyApp < Sinatra::Application
     css :bootstrap, [
       "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", 
       "/css/style.css",
-      "/css/default.css"
+      "/css/custom.css"
     ]
 
     js :main, [
@@ -48,8 +48,8 @@ class MyApp < Sinatra::Application
   end
 
   configure do
-    set :author, "Bryan"
-    set :desc, "Turbo Spice"
+    set :author, "Ninja76"
+    set :desc, "Clo Clo"
     set :public_dir, File.dirname(__FILE__) + '/public'
     set :views, File.dirname(__FILE__) + '/templates'
   end

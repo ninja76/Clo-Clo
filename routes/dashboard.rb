@@ -11,9 +11,7 @@
 ##
 ## Delete stream from dashboard
 ##
-
   delete '/dashboard/delete/:streamID' do 
-    
     if @isloggedin == false || !database[:streams][:account_uid => session[:user_id], :id => params[:streamID]]
       content_type :json
       "{\"result\": \"error\", \"message\": \"access denied\"}"
@@ -43,6 +41,9 @@
     return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
   end
 
+##
+## Dashboard account view
+##
   get '/dashboard/account' do
     @isloggedin = isLoggedIn(session)
     if @isLoggedin == false
@@ -52,6 +53,9 @@
     slim :dashboard_account
   end
 
+##
+## Primary dashboard view
+##
   get '/dashboard' do
     @isloggedin = isLoggedIn(session)  
     @formatted_streams = []
@@ -68,6 +72,9 @@
     end
   end
 
+##
+## Dashboard stream detail view
+##
   get '/dashboard/detail' do
    @isloggedin = isLoggedIn(session) 
    if session[:user_id]
@@ -79,6 +86,9 @@
     end
   end
 
+##
+## Public streams view
+##
   get '/streams/public' do
     @isloggedin = isLoggedIn(session)
     @formatted_streams = []
@@ -91,7 +101,9 @@
     slim :public_streams
   end
 
-
+##
+## Public stream detail
+##
   get '/streams/detail' do
     @charts = ''
     @isloggedin = isLoggedIn(session)
@@ -99,13 +111,19 @@
     slim :public_streams_detail
   end
 
+##
+## Dashboard update stream route
+## 
   post '/dashboard/update/:streamID' do
+    if @isloggedin == false || !database[:streams][:account_uid => session[:user_id], :id => params[:streamID]]
+      content_type :json
+      "{\"result\": \"error\", \"message\": \"access denied\"}"
+    end
+
     updated_name = params[:name]
     updated_desc = params[:desc]
-    puts "Updating Stream #{params[:streamID]} #{updated_name} #{updated_desc}"
-
     database[:streams].where(:id => params[:streamID]).update(:name => updated_name, :description => updated_desc);
-    
+
     content_type :json
     return '{"result": "success"}'
   end
