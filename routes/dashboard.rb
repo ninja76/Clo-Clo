@@ -72,7 +72,8 @@
    @isloggedin = isLoggedIn(session) 
    if session[:user_id]
       @stream_meta = database[:streams][:id => params[:stream_id]]
-      slim :dashboard_streams_detail, :layout => :layout_streams
+      @charts = ''
+      slim :dashboard_streams_detail
     else
       redirect '/login'
     end
@@ -92,9 +93,10 @@
 
 
   get '/streams/detail' do
+    @charts = ''
     @isloggedin = isLoggedIn(session)
     @stream_meta = database[:streams][:id => params[:stream_id]]
-    slim :public_streams_detail, :layout => :layout_streams
+    slim :public_streams_detail
   end
 
   post '/dashboard/update/:streamID' do

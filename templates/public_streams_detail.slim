@@ -1,5 +1,14 @@
+
 section.home-section.bg-white
   .container
+    .row
+      ol.breadcrumb.pull-left
+        li
+          a href="/"  Home
+        li
+          a href="/streams/public"  Public Streams
+        li.active #{@stream_meta[:name]} 
+ 
     .row
       .col-md-offset-2.col-md-8
         .section-heading

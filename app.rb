@@ -23,17 +23,23 @@ class MyApp < Sinatra::Application
     serve '/images',  from: 'public/images'     # Default
 
     css :bootstrap, [
-      "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-      "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css",
-      "/css/bootswatch.min.css",
-      "//cdn.datatables.net/1.10.0/css/jquery.dataTables.css"
+      "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", 
+      "/css/style.css",
+      "/css/default.css"
     ]
 
-    js :jsapp, [ "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
-     "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
-     "//cdn.datatables.net/1.10.0/js/jquery.dataTables.js",
-     "//cdn.datatables.net/plug-ins/e9421181788/integration/bootstrap/3/dataTables.bootstrap.js",
-     "/js/main.js"
+    js :main, [
+      "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
+      "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+      "/js/modernizr.custom.js",
+      "/js/main.js"
+    ]
+    js :charts, [
+      "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
+      "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+      "/js/modernizr.custom.js",
+      "//www.google.com/jsapi",
+      "/js/streams.js"
     ]
 
     css_compression :simple
