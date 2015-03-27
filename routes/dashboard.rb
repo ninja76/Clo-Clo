@@ -1,3 +1,48 @@
+  get '/dashboard/add' do
+    @isloggedin = isLoggedIn(session)
+
+    if @isloggedin == false
+      redirect '/login'
+    end
+
+    slim :dashboard_streams_add
+  end
+
+##
+## Delete stream from dashboard
+##
+
+  delete '/dashboard/delete/:streamID' do 
+    
+    if @isloggedin == false || !database[:streams][:account_uid => session[:user_id], :id => params[:streamID]]
+      content_type :json
+      "{\"result\": \"error\", \"message\": \"access denied\"}"
+    end
+
+    puts "deleting stream #{params[:streamID]}"
+    delete = database[:streams].filter(:id => params[:streamID]).delete
+
+    content_type :json 
+    "{\"result\": \"success\", \"message\": \"stream removed\"}"
+  end
+##
+## Create new stream from dashboard
+##
+  post '/dashboard/create' do
+    @isloggedin = isLoggedIn(session)
+
+    if @isloggedin == false
+      return "{\"result\": \"error\", \"message\": \"access denied\"}"
+    end
+
+    name = params[:stream_name]
+    desc = params[:stream_desc]
+
+    stream_id = database[:streams].insert(:account_uid => session[:user_id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)
+    content_type :json
+    return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
+  end
+
   get '/dashboard/account' do
     @isloggedin = isLoggedIn(session)
     if @isLoggedin == false

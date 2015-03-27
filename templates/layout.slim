@@ -33,7 +33,7 @@ html
 
           - if @isloggedin
             ul.nav.navbar-nav.pull-right
-              li
+              li class=(@isloggedin ? 'active' : '')
                 a href="/dashboard/account" 
                   span.glyphicon.glyphicon-user.glyphicon-white
               li

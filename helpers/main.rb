@@ -21,11 +21,15 @@ def isLoggedIn(session)
   end
 end
 
+
+##
+## Validate that the supplied key matches the actual key for the requested resource
+##
 def validateKey(proposedKey, streamUID)
   if database[:accounts][:id => streamUID, :key => proposedKey]
-    return false
+    return true
   end
-  return true
+  return false
 end
 
 def geolookup(ip)

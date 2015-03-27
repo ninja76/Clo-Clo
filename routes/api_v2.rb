@@ -23,16 +23,17 @@ end
 ##
 get '/api/streams/:streamID' do
   streamMeta = database[:streams][:id => streamID]
+
+  if streamMeta[:public] == 1 && !validateKey(params[:key], streamID)
+    content_type :json
+    return '{"result": "failed", "message": "access denied"}'
+  end
+
   result = $redis.zrange(streamID, 0, -1, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
   if streamMeta[:public] == 0
     content_type :json
     return a.to_json
-  end
-
-  if streamMeta[:public] == 1 && validateKey(params[:key], streamID)
-    content_type :json
-    return '{"result": "failed", "message": "invalid key"}'
   end
 end
 
@@ -43,13 +44,14 @@ put '/api/streams/:streamID' do
   streamID = params[:streamID]
   now = Time.now.to_i
   payload =  JSON.parse(request.body.read)
+
   streamMeta = database[:streams][:id => streamID]
   proposedKey = payload['key']
   actualKey = database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
 
   if !actualKey
     content_type :json
-    return '{"result": "failed", "message": "key required for this node"}'
+    return '{"result": "failed", "message": "access denied"}'
   end
 
   data = ""
@@ -77,16 +79,11 @@ end
 ##
 get '/api/update' do
   streamID = params[:stream_id]
-  # Update Time stamp
   now = Time.now.to_i
 
-  streamMeta = database[:streams][:id => streamID]
-  proposedKey = params[:key]
-  actualKey = database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
-
-  if !actualKey 
+  if !validateKey(params[:key], streamID) 
     content_type :json
-    return '{"result": "failed", "message": "key required for this node"}'
+    return '{"result": "failed", "message": "access denied"}'
   end
 
   data = ""
@@ -95,8 +92,8 @@ get '/api/update' do
       data = data + "#{k}: #{params[k]},"
     end
   end
-  data = data.chop
-  data = data + ";;#{now}"
+
+  data = data.chop + ";;#{now}"
   $redis.zadd(streamID,now,data)
   $redis.expire(streamID,86400)
 

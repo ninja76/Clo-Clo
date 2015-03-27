@@ -1,5 +1,24 @@
 window.onload=function(){
 
+  $('#btn-add').on('click', function () {
+      var stream_name = $('#stream_name').val()
+      var stream_desc = $('#stream_desc').val()
+      var formData = {stream_name:stream_name, stream_desc:stream_desc};
+        $.ajax({
+          url: '/dashboard/create',
+            type: "POST",
+            data : formData,
+            success: function(response) {
+              console.log(response)
+              if (response.result == "fail") {
+                $("#result").html('<div class="alert alert-danger">'+response.message+"</div>");
+              } else {
+                $("#result").html('<div class="alert alert-success">Stream Created! New Stream ID: '+response.stream_id+'</div>');
+              }
+            }
+          });
+  });
+
   $('#registerBtn').on('click', function () {
       var email = $('#inputEmail').val()
       var username = $('#inputUsername').val()

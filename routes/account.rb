@@ -3,7 +3,6 @@ post '/login/submit' do
   username = params[:username]
   password = params[:password]
   is_valid = database[:accounts][:account_name => username, :password => password]
-  puts is_valid.inspect
   if is_valid
     session[:user_id] = is_valid[:id] #username
     return "{\"result\": \"success\"}"

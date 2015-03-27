@@ -14,6 +14,17 @@ window.onload = function() {
     });
   });
 
+  $('#btn-delete').on('click', function () {
+    var stream_id = $('#streamID').val()
+    $.ajax({
+          url: '/dashboard/delete/'+stream_id,
+            type: "DELETE",
+            success: function(response) {
+	      window.location.replace("/dashboard");
+            }
+    });
+  });
+
 function drawCharts() {
             $.ajax({
                 url: '/api/chart_data?stream_id='+$('#streamID').val(),
@@ -50,6 +61,9 @@ function drawCharts() {
 
                         // Instantiate and draw our chart, passing in some options.
                         var chart = new google.visualization.LineChart($("#myChart"+i).get(0));
+                        //google.visualization.events.addListener(chart, 'ready', function () {
+                        //   console.log(chart.getImageURI);
+                        //});
                         chart.draw(data, options);
                     }
                 }

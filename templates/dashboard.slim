@@ -4,14 +4,17 @@ section.home-section.bg-white
       .col-md-offset-2.col-md-8
         .section-heading
           h1 Dashboard
-        h3 streams
-        table.table.table-striped
-          th.text-center Id
-          th.text-center  Name
-          th.text-center Last Update 
-          - for c in @formatted_streams
-            tr
-            <td>#{c[:id]}</td>
-            <td><a href="/dashboard/detail?stream_id=#{c[:id]}">#{c[:name]}</a></td>
-            <td>#{c[:updated_at]} ago</td>
-     
+        .row
+          h3 streams
+          a href="/dashboard/add"
+            button.btn.btn-primary.btn-md#btn-update-user.pull-left style="margin:15px;" type="button" New Stream
+        .row
+          table.table.table-striped
+            th.text-center Id
+            th.text-center  Name
+            th.text-center Last Update 
+            - for c in @formatted_streams
+              tr
+              <td>#{c[:id]}</td>
+              <td><a href="/dashboard/detail?stream_id=#{c[:id]}">#{c[:name]}</a></td>
+              <td>#{c[:updated_at]} ago</td>
