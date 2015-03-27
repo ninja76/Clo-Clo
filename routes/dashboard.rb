@@ -89,7 +89,7 @@
 ##
 ## Public streams view
 ##
-  get '/streams/public' do
+  get '/public' do
     @isloggedin = isLoggedIn(session)
     @formatted_streams = []
     streams = database[:streams].filter(:public => 0)
@@ -104,7 +104,7 @@
 ##
 ## Public stream detail
 ##
-  get '/streams/detail' do
+  get '/public/detail' do
     @charts = ''
     @isloggedin = isLoggedIn(session)
     @stream_meta = database[:streams][:id => params[:stream_id]]

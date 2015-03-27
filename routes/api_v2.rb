@@ -1,7 +1,7 @@
 ##
 ## Create New Stream
 ##
-post '/api/streams' do
+post '/streams' do
   key    = params[:key]
   name   = params[:name]
   desc   = params[:desc]
@@ -21,7 +21,7 @@ end
 ##
 ##  Get Stream Data
 ##
-get '/api/streams/:streamID' do
+get '/streams/:streamID' do
   streamMeta = database[:streams][:id => streamID]
 
   if streamMeta[:public] == 1 && !validateKey(params[:key], streamID)
@@ -40,7 +40,7 @@ end
 ##
 ## Update a Stream New Skool
 ##
-put '/api/streams/:streamID' do
+put '/streams/:streamID' do
   streamID = params[:streamID]
   now = Time.now.to_i
   payload =  JSON.parse(request.body.read)
@@ -104,8 +104,10 @@ get '/api/update' do
   return "{\"result\": \"success\", \"created_at\": #{now}}"
 end
 
-
-get '/api/chart_data' do
+##
+##  returns chart data for use with dashboard
+##
+get '/chart_data' do
   ## By default return the  last 24 hours of data
   ## If the timeframe parameter is entered (in seconds ex. 86400 = 24 hours) set the time frame to that value
   ##

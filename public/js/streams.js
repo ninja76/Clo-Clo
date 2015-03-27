@@ -27,7 +27,7 @@ window.onload = function() {
 
 function drawCharts() {
             $.ajax({
-                url: '/api/chart_data?stream_id='+$('#streamID').val(),
+                url: '/chart_data?stream_id='+$('#streamID').val(),
                 type: "GET",
                 success: function(response) {
                     if (response.result == "error")

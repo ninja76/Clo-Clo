@@ -24,10 +24,10 @@ section#started.home-section.bg-white
           ol
             li Register to get your API key
             li Create your first stream: 
-               curl -X POST -d key=[your_api_key] name=myStream description=myDescription http://www.clo-clo.net/api/streams
+               curl -X POST -d key=[your_api_key] name=myStream description=myDescription http://www.clo-clo.net/streams
             li The call will return something like this: 
                {"result": "success", "stream_id": "2", "created_at": 1426190920} Note the stream_id
             li Push data to your stream: 
-               curl -X PUT -d key=[your_api_key] arg1=val1 arg2=val2 http://www.clo-clo.net/api/streams/[stream_id]
+               curl -X PUT -d key=[your_api_key] arg1=val1 arg2=val2 http://www.clo-clo.net/streams/[stream_id]
             li Pull data from your stream:
-               curl http://www.clo-clo.net/api/streams/[stream_id]
+               curl http://www.clo-clo.net/streams/[stream_id] optional: &key=[your_api_key] if your stream is not public
