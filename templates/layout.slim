@@ -10,27 +10,24 @@ html
     nav.navbar.navbar-inverse style="background-color:#1D2864;"
       .container-fluid
         .navbar-header
+          button.navbar-toggle.collapsed data-target="#navbar-collapse-1" data-toggle="collapse" type="button" 
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
           a.navbar-brand style="color:#fff;"  href="/"  Clo Clo
-        div
+        div.collapse.navbar-collapse#navbar-collapse-1
           ul.nav.navbar-nav.pull-left
             li.active
               a href="/"  Home 
-            li.dropdown
-              a.dropdown-toggle aria-expanded="false" data-toggle="dropdown" href="#" role="button" 
-                | Streams
-                span.caret
-              ul.dropdown-menu role="menu" 
-                - if @isloggedin
-                  li
-                    a href="/dashboard" My Streams 
-                  li
-                    a href="#"  Watched Streams 
-                li
-                  a href="/public" Public Streams
-
-          - if @isloggedin
+            li
+              a href="/public" Public Streams
+            -if session[:user_id]
+              li 
+                a href="/dashboard" My Dashboard
+          - if session[:user_id]
             ul.nav.navbar-nav.pull-right
-              li class=(@isloggedin ? 'active' : '')
+              li.active
                 a href="/dashboard/account" 
                   span.glyphicon.glyphicon-user.glyphicon-white
               li

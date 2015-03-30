@@ -13,25 +13,6 @@
     "#{hours.to_s.rjust(2, '0')}:#{minutes.to_s.rjust(2, '0')}:#{seconds.to_s.rjust(2, '0')}"
   end
 
-def isLoggedIn(session)
-  if session[:user_id]
-    return true
-  else
-    return false
-  end
-end
-
-
-##
-## Validate that the supplied key matches the actual key for the requested resource
-##
-def validateKey(proposedKey, streamUID)
-  if database[:accounts][:id => streamUID, :key => proposedKey]
-    return true
-  end
-  return false
-end
-
 def geolookup(ip)
   require 'open-uri'
   geo  = JSON.parse(open("http://freegeoip.net/json/#{ip}") {|f| f.read })
@@ -43,7 +24,7 @@ end
 class KeyGenerator
   require "digest/sha1"
   def self.generate(length = 12)
-    Digest::SHA1.hexdigest(Time.now.to_s + rand(12341234).to_s)[1..length]
+    Digest::SHA1.hexdigest(Time.now.to_s + rand(19573047).to_s)[1..length]
   end
 end
 

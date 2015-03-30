@@ -5,14 +5,15 @@ require_relative 'config/database.rb'
 root = ::File.dirname(__FILE__)
 
 configure :development do
- set :database, "sqlite:///#{root}/data/spice.db"
- #set :show_exceptions, true
+  #set :database, "sqlite:///#{root}/data/spice.db"
+  set :database, ENV['DATABASE_URL']
+  #set :show_exceptions, true
 end
 
 configure :production do
-# set :database, URI.parse(ENV['DATABASE_URL'] || 'postgres:///localhost/mydb')
-set :database, "sqlite:///#{root}/data/spice.db"
-# set :show_exceptions, true
+  set :database, URI.parse(ENV['DATABASE_URL'])
+  #set :database, "sqlite:///#{root}/data/spice.db"
+  # set :show_exceptions, true
 end
 puts "The accounts table doesn't exist" if !database.table_exists?('accounts')
 puts "The streams table doesn't exist" if !database.table_exists?('streams')
@@ -45,4 +46,8 @@ migration "create the streams table" do
   end
 end
 
+migration "alter streams" do
+  database.alter_table :streams do
+  end
+end
 Sequel::Model.db.extension(:pagination)

@@ -19,6 +19,25 @@ post '/streams' do
 end
 
 ##
+## Get all stream metadata for key
+get '/streams' do
+  if params[:key]
+    key = params[:key]
+    user_id = database[:accounts][:key => key]
+    streams = database[:streams].filter(:account_uid => user_id[:id])
+  else
+     streams = database[:streams].filter(:public => 0)
+  end
+  jdata = []
+  streams.each do |d|
+    jdata << {:id => d[:id], :name => d[:name], :description => d[:description], :updated_at => d[:updated_at]}
+  end
+
+  content_type :json
+  return jdata.to_json
+end
+
+##
 ##  Get Stream Data
 ##
 get '/streams/:streamID' do
@@ -45,11 +64,7 @@ put '/streams/:streamID' do
   now = Time.now.to_i
   payload =  JSON.parse(request.body.read)
 
-  streamMeta = database[:streams][:id => streamID]
-  proposedKey = payload['key']
-  actualKey = database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
-
-  if !actualKey
+  if !validateKey(payload['key'], streamID)
     content_type :json
     return '{"result": "failed", "message": "access denied"}'
   end
@@ -66,12 +81,9 @@ put '/streams/:streamID' do
   $redis.expire(streamID,86400)
 
   # Update stream last update field
-  database[:streams].where(:id => streamID).update(:updated_at => now);
+  database[:streams].where(:id => streamID).update(:updated_at => Time.now);
 
-  puts "Updating #{streamID} with #{data}"
-
-  content_type :json
-  return "{\"result\": \"success\", \"created_at\": #{now}}"
+  status 200
 end
 
 ##
@@ -81,7 +93,8 @@ get '/api/update' do
   streamID = params[:stream_id]
   now = Time.now.to_i
 
-  if !validateKey(params[:key], streamID) 
+  if !validateKey(params[:key], streamID)
+    puts "whoops!"
     content_type :json
     return '{"result": "failed", "message": "access denied"}'
   end
@@ -98,16 +111,16 @@ get '/api/update' do
   $redis.expire(streamID,86400)
 
   # Update stream last update field
-  database[:streams].where(:id => streamID).update(:updated_at => now);
+  database[:streams].where(:id => streamID).update(:updated_at => Time.now);
 
-  content_type :json
-  return "{\"result\": \"success\", \"created_at\": #{now}}"
+  status 200
 end
 
 ##
 ##  returns chart data for use with dashboard
 ##
 get '/chart_data' do
+  now = Time.now.to_i
   ## By default return the  last 24 hours of data
   ## If the timeframe parameter is entered (in seconds ex. 86400 = 24 hours) set the time frame to that value
   ##
@@ -116,8 +129,9 @@ get '/chart_data' do
   else
     timerange = 86400
   end
+
   @streams = database[:streams][:id => params[:stream_id]]
-  result = $redis.zrange(@streams[:id], 0, -1, withscores: true)
+  result = $redis.zrangebyscore(@streams[:id],now-timerange ,now, withscores: true)
   a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
 
   series = result.map{|s| s[0].split(';;')[0] }
@@ -135,19 +149,16 @@ get '/chart_data' do
     series_data_array.push(Array.new)
     series_data_array[1].push(s.split(': ')[0])
   end
-  now = Time.now.to_i
+
   # Get Time Series Data and push array spot 0
   series_ts = result.map{|s| s[1]} 
 
   # Go over each timstamp and only keep the ones that fall into the timeframe
   series_ts.each do |s|
-    if s > now - timerange
-      series_data_array[0].push(s)
-    end
+    series_data_array[0].push(s)
   end
-  puts "Sending only the last #{series_data_array[0].length} records"
   # truncate the actual data to the last x number of records in the timestamp array
-  series.last(series_data_array[0].length).each do |item|
+  series.each do |item|
     s_count = 2
     item.split(',').each do |key|
       series_data_array[s_count].push(key.split(': ')[1])
@@ -155,6 +166,7 @@ get '/chart_data' do
     end
   end
 
+  content_type :json
   return series_data_array.to_json
 end
 

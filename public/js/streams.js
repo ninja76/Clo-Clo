@@ -16,6 +16,7 @@ window.onload = function() {
 
   $('#btn-delete').on('click', function () {
     var stream_id = $('#streamID').val()
+    console.log("delete");
     $.ajax({
           url: '/dashboard/delete/'+stream_id,
             type: "DELETE",
@@ -35,7 +36,7 @@ function drawCharts() {
                       $('#streams').append("<div style='text-align:center;'><h2>No data found</h2>");
                       return;
                     }
-                    response = JSON.parse(response);
+                    //response = JSON.parse(response);
                     for (i = 2; i < response.length; i++) {
                         var newCanvas =
                             $('<div/>', {
