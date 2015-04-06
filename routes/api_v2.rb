@@ -6,13 +6,12 @@ post '/streams' do
   name   = params[:name]
   desc   = params[:desc]
   public = params[:public]
-
-  user_meta = database[:accounts][:key => key]
-  if !user_meta
-    content_type :json
-    return '{"result": "failed", "message": "invalid key"}'
+  
+  if !validateKey(key)
+    halt 401, "invalid key"
   end
 
+  user_meta = getUserMetaByKey(key)
   stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
   content_type :json
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
@@ -21,10 +20,14 @@ end
 ##
 ## Get all stream metadata for key
 get '/streams' do
+
   if params[:key]
     key = params[:key]
-    user_id = database[:accounts][:key => key]
-    streams = database[:streams].filter(:account_uid => user_id[:id])
+    user_meta = getUserMetaByKey(key)
+    if !user_meta
+      halt 401, "invalid key"
+    end
+    streams = database[:streams].filter(:account_uid => user_meta[:id])
   else
      streams = database[:streams].filter(:public => 0)
   end
@@ -41,11 +44,14 @@ end
 ##  Get Stream Data
 ##
 get '/streams/:streamID' do
-  streamMeta = database[:streams][:id => streamID]
+  streamID = params[:streamID]
+  streamMeta = getStreamMeta(streamID)
 
-  if streamMeta[:public] == 1 && !validateKey(params[:key], streamID)
-    content_type :json
-    return '{"result": "failed", "message": "access denied"}'
+  if !streamMeta
+    halt 404, "stream not found"
+  end
+  if streamMeta[:public] == 1 && !validateStreamAccess(params[:key], streamID)
+    halt 401, "not authorized"
   end
 
   result = $redis.zrange(streamID, 0, -1, withscores: true)
@@ -64,9 +70,8 @@ put '/streams/:streamID' do
   now = Time.now.to_i
   payload =  JSON.parse(request.body.read)
 
-  if !validateKey(payload['key'], streamID)
-    content_type :json
-    return '{"result": "failed", "message": "access denied"}'
+  if !validateStreamAccess(payload['key'], streamID)
+    halt 401, "invalid key"
   end
 
   data = ""
@@ -79,7 +84,6 @@ put '/streams/:streamID' do
   data = data + ";;#{now}"
   $redis.zadd(streamID,now,data)
   $redis.expire(streamID,86400)
-
   # Update stream last update field
   database[:streams].where(:id => streamID).update(:updated_at => Time.now);
 
@@ -93,7 +97,7 @@ get '/api/update' do
   streamID = params[:stream_id]
   now = Time.now.to_i
 
-  if !validateKey(params[:key], streamID)
+  if !validateStreamAccess(params[:key], streamID)
     puts "whoops!"
     content_type :json
     return '{"result": "failed", "message": "access denied"}'
@@ -124,7 +128,7 @@ get '/chart_data' do
   ## By default return the  last 24 hours of data
   ## If the timeframe parameter is entered (in seconds ex. 86400 = 24 hours) set the time frame to that value
   ##
-  if params[:timeframe]
+  if params[:timeframe] && params[:timeframe] != "undefined"
     timerange = params[:timeframe].to_i
   else
     timerange = 86400

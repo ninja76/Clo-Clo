@@ -22,14 +22,40 @@ end
 ##
 ## Validate that the supplied key matches the actual key for the requested resource
 ##
-def validateKey(proposedKey, streamID)
+def validateStreamAccess(proposedKey, streamID)
   streamMeta = database[:streams][:id => streamID]
-  puts "#{streamMeta[:account_uid]} #{proposedKey}"
   if database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
-    puts "key matches"
     return true
   end
-  puts "key invalid"
   return false
 end
+
+##
+## Get user meta data from key or uid
+##
+def getUserMetaByKey(key)
+  return database[:accounts][:key => key]
+end
+
+def getUserMeta(uid)
+  return database[:accounts][:id => uid]
+end
+
+##
+## Get Stream Meta Data
+##
+def getStreamMeta(streamID)
+  return database[:streams][:id => streamID]
+end
+
+##
+## Simply validates that a given key infact exists
+##
+def validateKey(key)
+  if database[:accounts][:key => key]
+    return true
+  end
+  return false
+end
+
 

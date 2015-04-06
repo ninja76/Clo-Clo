@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/assetpack'
 require 'json/ext'
 require 'slim'
+require 'omniauth-twitter'
 require 'sequel'
 require 'redis'
 require './database'
@@ -20,12 +21,13 @@ class MyApp < Sinatra::Application
   assets do
     serve '/js',     from: 'public/js'        # Default
     serve '/css',    from: 'public/css'       # Default
-    serve '/images',  from: 'public/images'     # Default
+    serve '/images',  from: 'public/images'   # Default
 
     css :bootstrap, [
       "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css", 
       "/css/style.css",
-      "/css/custom.css"
+      "/css/custom.css",
+      "/css/ladda-themeless.min.css"
     ]
 
     js :main, [
@@ -39,6 +41,8 @@ class MyApp < Sinatra::Application
       "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
       "/js/modernizr.custom.js",
       "//www.google.com/jsapi",
+      "/js/lib/spin.min.js",
+      "/js/lib/ladda.min.js",
       "/js/streams.js"
     ]
 
@@ -52,7 +56,11 @@ class MyApp < Sinatra::Application
     set :desc, "Clo Clo"
     set :public_dir, File.dirname(__FILE__) + '/public'
     set :views, File.dirname(__FILE__) + '/templates'
+    use OmniAuth::Builder do
+      provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
+    end
   end
+
 end
 
 require_relative 'routes/init'

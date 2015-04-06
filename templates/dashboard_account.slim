@@ -14,9 +14,16 @@ section.home-section.bg-white
           h4 API Keys
           table.table.table-striped
             th.text-center Key 
-            th.text-center  Delete 
+            th.text-center  
             tr
-            td sahfjshfjsa
-            td delete me
+            td #{@user_meta[:key]}
+            td 
+              button.btn.btn-danger.btn-delete-key id="#{@user_meta[:key]}" type="button" Generate New Key
         .row
-          button.btn.btn-primary#btn-update-user type="button" Issue Key
+          h4 Your Information
+          form.col-md-offset-4.col-md-4 role="form"
+            .form-group
+              label for="user_email"  Email Address
+              input#user_email.form-control value="#{@user_meta[:email]}" type="email" /
+            .form-group
+              button.btn.btn-primary#btn-update-account.pull-left style="margin-right:15px;" type="button" Update

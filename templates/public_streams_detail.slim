@@ -14,7 +14,14 @@ section.home-section.bg-white
         .section-heading
           h2 #{@stream_meta[:name]}
           h4 #{@stream_meta[:description]}
-          h5 Last 24 hours
+    .row
+     .btn-group
+       button.btn.btn-primary#day data-style="expand-left" 
+         span 1 Day
+       button.btn.btn-primary#week data-style="expand-left"
+         span 7 Day
+       button.btn.btn-primary#month data-style="expand-left"
+         span 30 Day
           
     #streams.col-md-11
     input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" /

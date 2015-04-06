@@ -51,8 +51,11 @@
 ##
   get '/dashboard/account' do
     protected!
+    puts "UID: #{session[:user_id]}"
 
-    @user_meta = database[:accounts][:id => session[:user_id]]
+    @user_meta = getUserMeta(session[:user_id])
+    puts @user_meta.inspect
+
     slim :dashboard_account
   end
 
@@ -62,8 +65,8 @@
   get '/dashboard/detail' do
     protected!
     @charts = ''
-
-    @stream_meta = database[:streams][:id => params[:stream_id]]
+                   
+    @stream_meta = getStreamMeta(params[:stream_id])
     slim :dashboard_streams_detail
   end
 
@@ -73,7 +76,6 @@
   get '/public' do
     @formatted_streams = []
     streams = database[:streams].filter(:public => 0)
-    puts streams.inspect
     streams.each do |s|
       @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=> time_diff(s[:updated_at])}
     end
@@ -85,7 +87,7 @@
 ##
   get '/public/detail' do
     @charts = ''
-    @stream_meta = database[:streams][:id => params[:stream_id]]
+    @stream_meta = getStreamMeta(params[:stream_id])
 
     slim :public_streams_detail
   end

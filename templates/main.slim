@@ -20,14 +20,19 @@ section#started.home-section.bg-white
       .col-md-offset-2.col-md-8
         .section-heading
           h2 Getting Started
+        .label.label-success.label-as-badge style="font-size:1.00em;margin-bottom:15px;"
+          | Push Data
         pre style="text-align:left;"
-          ol
-            li Register to get your API key
-            li Create your first stream: 
-               curl -X POST -d key=[your_api_key] name=myStream description=myDescription http://www.clo-clo.net/streams
-            li The call will return something like this: 
-               {"result": "success", "stream_id": "2", "created_at": 1426190920} Note the stream_id
-            li Push data to your stream: 
-               curl -X PUT -d key=[your_api_key] arg1=val1 arg2=val2 http://www.clo-clo.net/streams/[stream_id]
-            li Pull data from your stream:
-               curl http://www.clo-clo.net/streams/[stream_id] optional: &key=[your_api_key] if your stream is not public
+          | PUT http://www.clo-clo.net/streams/[stream_id]<br/>
+          | arguments: <br/>
+          | key=[your_api_key]<br/>
+          | arg1=value<br/>
+          | arg2=value<br/>
+        .label.label-success.label-as-badge style="font-size:1.00em;margin-bottom:15px;"
+          | Pull Data
+        pre style="text-align:left;"
+          | GET http://www.clo-clo.net/streams/[stream_id] <br/>
+          | optional arguments:<br/>
+          | start=[start time in epoch]<br/>
+          | end=[end time in epoch]<br/>
+          | key=[your_api_key] if your stream is not public

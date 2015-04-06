@@ -9,6 +9,7 @@ gem 'mysql'
 gem 'sqlite3'
 gem 'foreman'
 gem 'thin'
+gem 'omniauth-twitter'
 
 group :development do
 end

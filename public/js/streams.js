@@ -1,5 +1,8 @@
 window.onload = function() {
 
+  $('#tabs').tab();
+  var current_timerange = 86400;
+
   $('#btn-update').on('click', function () {
     var name = $('#stream_name').val()
     var desc = $('#stream_desc').val()
@@ -26,11 +29,25 @@ window.onload = function() {
     });
   });
 
-function drawCharts() {
+  $('#day').on('click', function () {
+    current_timerange = 86400;
+    drawCharts(current_timerange);
+  });
+  $('#week').on('click', function () {
+    current_timerange = 86400*7;
+    drawCharts(current_timerange);
+  });
+  $('#month').on('click', function () {
+    current_timerange = 604800 *4;
+    drawCharts(current_timerange);
+  });
+
+function drawCharts(timerange) {
             $.ajax({
-                url: '/chart_data?stream_id='+$('#streamID').val(),
+                url: '/chart_data?timeframe='+timerange+'&stream_id='+$('#streamID').val(),
                 type: "GET",
                 success: function(response) {
+                     $('#streams').html("");
                     if (response.result == "error")
                     {
                       $('#streams').append("<div style='text-align:center;'><h2>No data found</h2>");
@@ -56,7 +73,7 @@ function drawCharts() {
                         }
                         // Set chart options
                         var options = {
-                            'title': response[1][i-2],
+                            'title': response[1][i-2]+" / Last value: "+response[i][response[0].length-1],
                             'height': 200
                         };
 
@@ -70,8 +87,8 @@ function drawCharts() {
                 }
             });
         };
-        setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 200);
+        setTimeout(function(){google.load('visualization', '1', {'callback':drawCharts, 'packages':['corechart']})}, 1000);
    $(window).resize(function(){
-        drawCharts();
+        drawCharts(current_timerange);
     });
 }
