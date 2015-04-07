@@ -53,7 +53,7 @@ window.onload=function(){
             type: "POST",
             data : formData,
             success: function(response) {
-              response = JSON.parse(response)
+              console.log("adfasfd " + response);
               if (response.result == "fail") {
                 $("div.error").html('<div class="alert alert-danger">'+response.error+"</div>");
               } else {

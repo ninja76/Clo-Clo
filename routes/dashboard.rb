@@ -6,6 +6,7 @@
 
     @formatted_streams = []
     streams = database[:streams].filter(:account_uid => session[:user_id])
+    puts "UID #{session[:user_id]}"
     streams.each do |s|
       @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
     end
@@ -64,9 +65,18 @@
 ##
   get '/dashboard/detail' do
     protected!
+
     @charts = ''
-                   
+    @field_data = []                   
     @stream_meta = getStreamMeta(params[:stream_id])
+    if @stream_meta[:fields] != nil
+      @stream_meta[:fields].split(':').drop(1).each do |f|
+          puts "#{f.inspect}"
+          name = f.split(',')[0]
+          @field_data << {:name => name, :uom => f.split(',')[1], :min => f.split(',')[2], :max => f.split(',')[3]}
+      end
+    end
+    puts "#{@field_data}"
     slim :dashboard_streams_detail
   end
 
@@ -88,6 +98,9 @@
   get '/public/detail' do
     @charts = ''
     @stream_meta = getStreamMeta(params[:stream_id])
+    if @stream_meta == nil
+      halt 200, "Stream not found"
+    end
 
     slim :public_streams_detail
   end
@@ -104,8 +117,7 @@
 
     updated_name = params[:name]
     updated_desc = params[:desc]
-    database[:streams].where(:id => params[:streamID]).update(:name => updated_name, :description => updated_desc);
+    database[:streams].where(:id => params[:streamID]).update(:name => updated_name, :fields => params[:field], :description => updated_desc);
 
     status 200
   end
-

@@ -13,11 +13,15 @@ require './config/redis'
 Sinatra::Application.register Sinatra::AssetPack
 
 class MyApp < Sinatra::Application
+
   enable :sessions
 
-  use Rack::Session::Cookie, :expire_after => 60*60*3, :secret => 'summeriscoolerthenwinter'
+#  use Rack::Session::Cookie, 
+#                           :expire_after => 60*60*3,
+#                           :secret => 'summeriscoolerthenwinter'
+
   register Sinatra::AssetPack
-  enable :inline_templates
+
   assets do
     serve '/js',     from: 'public/js'        # Default
     serve '/css',    from: 'public/css'       # Default
@@ -52,14 +56,24 @@ class MyApp < Sinatra::Application
   end
 
   configure do
-    set :author, "Ninja76"
-    set :desc, "Clo Clo"
     set :public_dir, File.dirname(__FILE__) + '/public'
     set :views, File.dirname(__FILE__) + '/templates'
     use OmniAuth::Builder do
       provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
     end
   end
+  
+  configure :development do
+      #enable :sessions,  # no need
+      enable :logging, :dump_errors, :inline_templates
+      enable :methodoverride
+    end
+
+    configure :production do
+      enable :dump_errors, :inline_templates
+      enable :methodoverride
+    end
+
 
 end
 

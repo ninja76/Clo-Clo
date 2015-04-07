@@ -30,8 +30,8 @@ section.home-section.bg-white
               input#stream_desc.form-control value="#{@stream_meta[:description]}" type="text" /
             .checkbox
               label
-                input type="checkbox" /
                 | Make this Stream Private?
+                input type="checkbox" /
           .row
             .form-group
               button.btn.btn-primary#btn-update.pull-left style="margin-right:15px;" type="button" Update
@@ -43,55 +43,68 @@ section.home-section.bg-white
               .row
                 .form-group.col-md-offset-3.col-md-2
                   label for="field1_name" Field Name 
-                  input#field1_name.form-control value="" type="text" /
+                  input#field1_name.form-control value="#{@field_data[0][:name]}" type="text" /
                 .form-group.col-md-1
                   label for="field1_uom" UoM
-                  input#field1_uom.form-control value="" type="text" / 
+                  input#field1_uom.form-control value="#{@field_data[0][:uom]}" type="text" / 
                 .form-group.col-md-1
                   label for="field1_min_value" Min value
-                  input#field1_min_value.form-control value="" type="text" /
+                  input#field1_min_value.form-control value="#{@field_data[0][:min]}" type="text" /
                 .form-group.col-md-1
                   label for="field1_max_value" Max value
-                  input#field1_max_value.form-control value="" type="text" /
+                  input#field1_max_value.form-control value="#{@field_data[0][:max]}" type="text" /
               .row  
                 .form-group.col-md-offset-3.col-md-2
-                  input#field2_name.form-control value="" type="text" /
+                  label for="field2_name" Field Name
+                  input#field2_name.form-control value="#{@field_data[1][:name]}" type="text" /
                 .form-group.col-md-1
-                  input#field2_uom.form-control value="" type="text" /
+                  label for="field2_uom" UoM
+                  input#field2_uom.form-control value="#{@field_data[1][:uom]}" type="text" /
                 .form-group.col-md-1
-                  input#field2_min_value.form-control value="" type="text" /
+                  label for="field2_min_value" Min value
+                  input#field2_min_value.form-control value="#{@field_data[1][:min]}" type="text" /
                 .form-group.col-md-1
-                  input#field2_max_value.form-control value="" type="text" /
+                  label for="fiel2_max_value" Max value
+                  input#field2_max_value.form-control value="#{@field_data[1][:max]}" type="text" /
               .row
                 .form-group.col-md-offset-3.col-md-2
-                  input#field3_name.form-control value="" type="text" /
+                  label for="field3_name" Field Name
+                  input#field3_name.form-control value="#{@field_data[2][:name]}" type="text" /
                 .form-group.col-md-1
-                  input#field3_uom.form-control value="" type="text" /
+                  label for="field3_uom" UoM
+                  input#field3_uom.form-control value="#{@field_data[2][:uom]}" type="text" /
                 .form-group.col-md-1
-                  input#field3_min_value.form-control value="" type="text" /
+                  label for="field3_min_value" Min value
+                  input#field3_min_value.form-control value="#{@field_data[2][:min]}" type="text" /
                 .form-group.col-md-1
-                  input#field3_max_value.form-control value="" type="text" /
+                  label for="field3_max_value" Max value
+                  input#field3_max_value.form-control value="#{@field_data[2][:max]}" type="text" /
               .row
                 .form-group.col-md-offset-3.col-md-2
-                  input#field4_name.form-control value="" type="text" /
+                  label for="field4_name" Field Name
+                  input#field4_name.form-control value="#{@field_data[3][:name]}" type="text" /
                 .form-group.col-md-1
-                  input#field4_uom.form-control value="" type="text" /
+                  label for="field4_uom" UoM
+                  input#field4_uom.form-control value="#{@field_data[3][:uom]}" type="text" /
                 .form-group.col-md-1
-                  input#field4_min_value.form-control value="" type="text" /
+                  label for="field4_min_value" Min value
+                  input#field4_min_value.form-control value="#{@field_data[3][:min]}" type="text" /
                 .form-group.col-md-1
-                  input#field4_max_value.form-control value="" type="text" / 
+                  label for="field4_max_value" Max value
+                  input#field4_max_value.form-control value="#{@field_data[3][:max]}" type="text" / 
               .row
                 .form-group.col-md-offset-3.col-md-2
-                  input#field5_name.form-control value="" type="text" /
+                  label for="field5_name" Field Name
+                  input#field5_name.form-control value="#{@field_data[4][:name]}" type="text" /
                 .form-group.col-md-1
-                  input#field5_uom.form-control value="" type="text" /
+                  label for="field5_uom" UoM
+                  input#field5_uom.form-control value="#{@field_data[4][:uom]}" type="text" /
                 .form-group.col-md-1
-                  input#field5_min_value.form-control value="" type="text" /
+                  label for="field5_min_value" Min value
+                  input#field5_min_value.form-control value="#{@field_data[4][:min]}" type="text" /
                 .form-group.col-md-1
-                  input#field5_max_value.form-control value="" type="text" / 
-            .row
-              .form-group
-                button.btn.btn-primary#btn-update.pull-left style="margin-right:15px;" type="button" Update
+                  label for="field5_max_value" Max value
+                  input#field5_max_value.form-control value="#{@field_data[4][:max]}" type="text" / 
 
         .tab-pane.active#red
           .btn-group

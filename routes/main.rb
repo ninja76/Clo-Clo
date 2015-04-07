@@ -29,6 +29,7 @@
 ##
   get '/logout' do
     session.clear
+    puts "clearing session #{session.inspect}"
     redirect '/'
   end
 

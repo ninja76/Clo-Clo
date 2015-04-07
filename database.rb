@@ -22,6 +22,8 @@ migration "create the accounts table" do
   database.create_table :accounts do
     primary_key :id
     text      :account_name
+    text      :twitter_uid
+    text      :photo_url
     text      :key
     text      :email
     text      :password

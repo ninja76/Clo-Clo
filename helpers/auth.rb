@@ -24,7 +24,7 @@ end
 ##
 def validateStreamAccess(proposedKey, streamID)
   streamMeta = database[:streams][:id => streamID]
-  if database[:accounts][:id => streamMeta[:account_uid], :key => proposedKey]
+  if database[:accounts][:twitter_uid => streamMeta[:account_uid], :key => proposedKey]
     return true
   end
   return false
@@ -38,7 +38,7 @@ def getUserMetaByKey(key)
 end
 
 def getUserMeta(uid)
-  return database[:accounts][:id => uid]
+  return database[:accounts][:twitter_uid => uid]
 end
 
 ##

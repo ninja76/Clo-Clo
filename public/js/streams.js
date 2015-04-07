@@ -8,6 +8,13 @@ window.onload = function() {
     var desc = $('#stream_desc').val()
     var stream_id = $('#streamID').val()
     var formData = {name:name, desc:desc};
+    var fieldData = ''
+    for (i=1; i<6; i++)
+    {
+      var thisField= $('#field'+i+'_name').val()+','+$('#field'+i+'_uom').val()+','+$('#field'+i+'_min_value').val()+','+$('#field'+i+'_max_value').val();
+      fieldData = fieldData + ':' + thisField
+    }
+    var formData = {name:name, desc:desc, field:fieldData};
     $.ajax({
           url: '/dashboard/update/'+stream_id,
             type: "POST",
@@ -42,6 +49,8 @@ window.onload = function() {
     drawCharts(current_timerange);
   });
 
+
+  
 function drawCharts(timerange) {
             $.ajax({
                 url: '/chart_data?timeframe='+timerange+'&stream_id='+$('#streamID').val(),

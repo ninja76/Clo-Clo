@@ -1,17 +1,20 @@
 
 post '/login/submit' do
-  username = params[:username]
+  username = params[:username].downcase
   password = params[:password]
   is_valid = database[:accounts][:account_name => username, :password => password]
   if is_valid
-    session[:user_id] = is_valid[:id] #username
+    puts "#{username} successfully logged in!"
+    session[:user_id] = is_valid[:id]
     return "{\"result\": \"success\"}"
   end 
+  puts "#{username} failed to login!"
+  content_type :json
   return "{\"result\": \"fail\", \"error\": \"Invalid username/password\"}"
 end
 
 post '/register/submit' do
-  username = params[:username]
+  username = params[:username].downcase
   password = params[:password]
   #email = params[:email]
   email = ""
@@ -33,6 +36,6 @@ post '/register/submit' do
   database[:accounts].insert(:account_name => username, :password => password, :email => email, :key => key, :created_at => Time.now)
 
   session[:user_id] = username
-
-  return "{\"result\": \"ok\", \"key\": \"#{key}\"}"
+  redirect '/dashboard'
+#  return "{\"result\": \"ok\", \"key\": \"#{key}\"}"
 end

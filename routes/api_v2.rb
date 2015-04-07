@@ -11,8 +11,9 @@ post '/streams' do
     halt 401, "invalid key"
   end
 
+  field_default_data = ":field1,,,:field2,,,:field3,,,:field4,,,:field,,,"
   user_meta = getUserMetaByKey(key)
-  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
+  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now, fields => field_default_data)  
   content_type :json
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
 end
