@@ -11,7 +11,7 @@ post '/streams' do
     halt 401, "invalid key"
   end
 
-  field_default_data = ":field1,,,:field2,,,:field3,,,:field4,,,:field,,,"
+  field_default_data = ":,,,:,,,:,,,:,,,:,,,"
   user_meta = getUserMetaByKey(key)
   stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now, fields => field_default_data)  
   content_type :json
@@ -51,6 +51,7 @@ get '/streams/:streamID' do
   if !streamMeta
     halt 204, "No content found"
   end
+
   if streamMeta[:public] == 1 && !validateStreamAccess(params[:key], streamID)
     halt 401, "not authorized"
   end
@@ -74,6 +75,8 @@ put '/streams/:streamID' do
   if !validateStreamAccess(payload['key'], streamID)
     halt 401, "invalid key"
   end
+ 
+  stream_meta = getStreamMeta(streamID)
 
   data = ""
   payload.each do |k, v| 
