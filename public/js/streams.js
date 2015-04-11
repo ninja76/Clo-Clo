@@ -11,7 +11,7 @@ window.onload = function() {
     var fieldData = ''
     for (i=1; i<6; i++)
     {
-      var thisField= $('#field'+i+'_name').val()+','+$('#field'+i+'_uom').val()+','+$('#field'+i+'_min_value').val()+','+$('#field'+i+'_max_value').val();
+      var thisField= $('#field'+i+'_name').val()+','+$('#field'+i+'_uom').val()+','+$('#field'+i+'_alias').val();
       fieldData = fieldData + ':' + thisField
     }
     var formData = {name:name, desc:desc, field:fieldData};
@@ -63,7 +63,7 @@ function drawCharts(timerange) {
                       return;
                     }
                     //response = JSON.parse(response);
-                    for (i = 2; i < response.length; i++) {
+                    for (i = 3; i < response.length; i++) {
                         var newCanvas =
                             $('<div/>', {
                                 'class': '',
@@ -72,9 +72,10 @@ function drawCharts(timerange) {
                             })
                             .height(200);
                         $('#streams').append(newCanvas);
+                        
                         var data = new google.visualization.DataTable();
                         data.addColumn('datetime', 'Time');
-                        data.addColumn('number', response[1][i-2]);
+                        data.addColumn('number', response[1][i-3]);
                         for (ii = 0; ii < response[0].length; ii++) {
                             data.addRow([
                                 (new Date(response[0][ii]*1000)), parseFloat(response[i][ii])
@@ -82,8 +83,14 @@ function drawCharts(timerange) {
                         }
                         // Set chart options
                         var options = {
-                            'title': response[1][i-2]+" / Last value: "+response[i][response[0].length-1],
-                            'height': 200
+                            'title': response[1][i-3]+" / Last value: "+response[i][response[0].length-1],
+                            'height': 200,
+                            'legend': 'none',
+                            vAxis: {
+                              title:  response[2][i-3],
+                              slantedText:true,
+                              slantedTextAngle:90
+                            },
                         };
 
                         // Instantiate and draw our chart, passing in some options.

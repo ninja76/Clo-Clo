@@ -46,7 +46,6 @@ class MyApp < Sinatra::Application
       "/js/modernizr.custom.js",
       "//www.google.com/jsapi",
       "/js/lib/spin.min.js",
-      "/js/lib/ladda.min.js",
       "/js/streams.js"
     ]
 

@@ -73,10 +73,9 @@
       @stream_meta[:fields].split(':').drop(1).each do |f|
           puts "#{f.inspect}"
           name = f.split(',')[0]
-          @field_data << {:name => name, :uom => f.split(',')[1], :min => f.split(',')[2], :max => f.split(',')[3]}
+          @field_data << {:name => name, :uom => f.split(',')[1], :alias => f.split(',')[2]}
       end
     end
-    puts "#{@field_data}"
     slim :dashboard_streams_detail
   end
 

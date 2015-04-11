@@ -49,7 +49,7 @@ get '/streams/:streamID' do
   streamMeta = getStreamMeta(streamID)
 
   if !streamMeta
-    halt 404, "stream not found"
+    halt 204, "No content found"
   end
   if streamMeta[:public] == 1 && !validateStreamAccess(params[:key], streamID)
     halt 401, "not authorized"
@@ -141,8 +141,9 @@ get '/chart_data' do
 
   series = result.map{|s| s[0].split(';;')[0] }
   series_data_array = Array.new
-  series_data_array.push(Array.new)
-  series_data_array.push(Array.new)
+  series_data_array.push(Array.new) #timestamps array
+  series_data_array.push(Array.new) #Label array
+  series_data_array.push(Array.new) #UoM array
 
   # Get data labels and push them to array spot 1 and create a new array for each data point
   if !series[0]
@@ -152,7 +153,24 @@ get '/chart_data' do
 
   series[0].split(',').each do |s|
     series_data_array.push(Array.new)
-    series_data_array[1].push(s.split(': ')[0])
+    if @streams[:fields] != nil
+      @streams[:fields].split(':').drop(1).each do |f|
+          name = f.split(',')[0]
+          if s.split(': ')[0] == name && f.split(',')[2] != nil
+             series_data_array[1].push(f.split(',')[2])
+          end
+          if s.split(': ')[0] == name && f.split(',')[2] == nil
+            series_data_array[1].push(s.split(': ')[0])
+          end
+          if  s.split(': ')[0] == name 
+            if f.split(',')[1] != nil
+              series_data_array[2].push(f.split(',')[1])
+            else
+              series_data_array[2].push("")
+            end
+         end
+      end
+    end
   end
 
   # Get Time Series Data and push array spot 0
@@ -164,7 +182,7 @@ get '/chart_data' do
   end
   # truncate the actual data to the last x number of records in the timestamp array
   series.each do |item|
-    s_count = 2
+    s_count = 3
     item.split(',').each do |key|
       series_data_array[s_count].push(key.split(': ')[1])
       s_count = s_count+1
