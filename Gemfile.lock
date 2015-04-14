@@ -29,6 +29,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rake (10.4.2)
     redis (3.0.7)
     sequel (4.10.0)
     sinatra (1.4.5)
@@ -69,6 +70,7 @@ DEPENDENCIES
   foreman
   mysql
   omniauth-twitter
+  rake
   redis
   sinatra
   sinatra-assetpack

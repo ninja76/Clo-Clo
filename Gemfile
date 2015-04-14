@@ -17,3 +17,7 @@ end
 
 group :production do
 end
+
+group :test do
+  gem 'rake'
+end
