@@ -2,6 +2,7 @@
 require 'rubygems'
 require 'sinatra'
 require 'sinatra/assetpack'
+require 'sinatra/config_file'
 require 'json/ext'
 require 'slim'
 require 'omniauth-twitter'
@@ -13,14 +14,10 @@ require './config/redis'
 Sinatra::Application.register Sinatra::AssetPack
 
 class MyApp < Sinatra::Application
-
   enable :sessions
-
-#  use Rack::Session::Cookie, 
-#                           :expire_after => 60*60*3,
-#                           :secret => 'summeriscoolerthenwinter'
-
   register Sinatra::AssetPack
+  register Sinatra::ConfigFile
+  config_file './config/config.yaml'
 
   assets do
     serve '/js',     from: 'public/js'        # Default
@@ -55,15 +52,14 @@ class MyApp < Sinatra::Application
   end
 
   configure do
-    set :public_dir, File.dirname(__FILE__) + '/public'
-    set :views, File.dirname(__FILE__) + '/templates'
+#    set :public_dir, File.dirname(__FILE__) + '/public'
+#    set :views, File.dirname(__FILE__) + '/templates'
     use OmniAuth::Builder do
       provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
     end
   end
   
   configure :development do
-      #enable :sessions,  # no need
       enable :logging, :dump_errors, :inline_templates
       enable :methodoverride
     end
