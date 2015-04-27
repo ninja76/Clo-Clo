@@ -21,7 +21,7 @@
     if isLoggedIn(session)
       redirect '/dashboard'
     end
-    slim :login
+    redirect '/auth/twitter'
   end
 
 ##

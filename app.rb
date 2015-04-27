@@ -52,8 +52,8 @@ class MyApp < Sinatra::Application
   end
 
   configure do
-#    set :public_dir, File.dirname(__FILE__) + '/public'
-#    set :views, File.dirname(__FILE__) + '/templates'
+    set :public_dir, File.dirname(__FILE__) + '/public'
+    set :views, File.dirname(__FILE__) + '/templates'
     use OmniAuth::Builder do
       provider :twitter, ENV['CONSUMER_KEY'], ENV['CONSUMER_SECRET']
     end
