@@ -37,17 +37,28 @@ section.home-section.bg-white
           .row
             h3 Fields
             form role="form"
-            -1.upto(7) do |i|  
+            -0.upto(6) do |i|  
               .row
+              -if @field_data[i] != nil
                 .form-group.col-md-offset-2.col-md-3
                   label for="field#{i}_name" Field Name
-                  input.form-control id ="field#{i}_name" value="#{@field_data[i-1][:name]}" type="text" /
+                  input.form-control id ="field#{i}_name" value="#{@field_data[i][:name]}" type="text" /
                 .form-group.col-md-2
                   label for="field#{i}_uom" UoM
-                  input.form-control id ="field#{i}_uom" value="#{@field_data[i-1][:uom]}" type="text" /
+                  input.form-control id ="field#{i}_uom" value="#{@field_data[i][:uom]}" type="text" /
                 .form-group.col-md-3
                   label for="field#{i}_min_value" Alias
-                  input.form-control id ="field#{i}_alias" value="#{@field_data[i-1][:alias]}" type="text" /
+                  input.form-control id ="field#{i}_alias" value="#{@field_data[i][:alias]}" type="text" /
+              -else
+                .form-group.col-md-offset-2.col-md-3
+                  label for="field#{i}_name" Field Name
+                  input.form-control id ="field#{i}_name" value="" type="text" /
+                .form-group.col-md-2
+                  label for="field#{i}_uom" UoM
+                  input.form-control id ="field#{i}_uom" value="" type="text" /
+                .form-group.col-md-3
+                  label for="field#{i}_min_value" Alias
+                  input.form-control id ="field#{i}_alias" value="" type="text" / 
           .modal-footer
             button.btn.btn-default data-dismiss="modal" type="button"  Close
             button.btn.btn-primary#btn-update type="button"  Update

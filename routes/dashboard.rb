@@ -72,9 +72,9 @@
     if @stream_meta[:fields] != nil
       @stream_meta[:fields].split(':').drop(1).each do |f|
           puts "#{f.inspect}"
-          name = f.split(',')[0]
-          @field_data << {:name => name, :uom => f.split(',')[1], :alias => f.split(',')[2]}
+          @field_data << {:name => f.split(',')[0], :uom => f.split(',')[1], :alias => f.split(',')[2]}
       end
+      puts @field_data.inspect
     end
     slim :dashboard_streams_detail
   end
