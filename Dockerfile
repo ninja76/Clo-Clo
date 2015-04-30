@@ -17,7 +17,7 @@ RUN gem install bundler
 RUN gem install rack
 RUN git clone https://github.com/ninja76/clo-clo /opt/cloclo
 RUN cd /opt/cloclo; bundle install
-#RUN echo 'ENV["DATABASE_URL"] = "mysql://user/password@mysqlhost:3306/spice"' > /opt/cloclo/.env.rb
+#RUN echo 'ENV["DATABASE_URL"] = "mysql://user:password@mysqlhost:3306/spice"' > /opt/cloclo/.env.rb
 EXPOSE 4567
 CMD ["/usr/local/bin/foreman","start","-d","/opt/cloclo"]
 
