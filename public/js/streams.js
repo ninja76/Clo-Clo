@@ -9,9 +9,11 @@ window.onload = function() {
     var stream_id = $('#streamID').val()
     var formData = {name:name, desc:desc};
     var fieldData = ''
-    for (i=0; i<6; i++)
+    for (i=0; i<7; i++)
     {
       var thisField= $('#field'+i+'_name').val()+','+$('#field'+i+'_uom').val()+','+$('#field'+i+'_alias').val();
+      console.log('#field'+i+'_name');
+      console.log(thisField);
       fieldData = fieldData + ':' + thisField
     }
     var formData = {name:name, desc:desc, field:fieldData};

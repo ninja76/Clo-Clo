@@ -49,11 +49,27 @@ def getStreamMeta(streamID)
 end
 
 ##
-## Simply validates that a given key infact exists
+## get stream id from node and key
 ##
-def validateKey(key)
-  if database[:accounts][:key => key]
-    return true
+def getStreamIdfromNodeKey(node, key)
+  account = database[:accounts][:key => key]
+  if account
+    rec = database[:streams][:name => node, :account_uid => account[:twitter_uid].to_s]
+  end
+  if rec
+    return rec[:id]
+  else
+    return false  
+  end
+end
+
+##
+## returns account_id of given key
+##
+def getIdfromKey(key)
+  rec = database[:accounts][:key => key]
+  if rec
+    return rec[:twitter_uid]
   end
   return false
 end

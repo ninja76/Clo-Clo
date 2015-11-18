@@ -13,7 +13,7 @@ post '/streams' do
 
   field_default_data = ":,,,:,,,:,,,:,,,:,,,:,,,:,,,"
   user_meta = getUserMetaByKey(key)
-  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now, fields => field_default_data)  
+  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now, :fields => field_default_data)  
   content_type :json
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
 end
@@ -42,14 +42,14 @@ get '/streams' do
 end
 
 ##
-##  Get Stream Data
+##  Get Stream Data by stream ID
 ##
-get '/streams/:streamID' do
+get '/streams/id/:streamID' do
   streamID = params[:streamID]
   streamMeta = getStreamMeta(streamID)
 
   if !streamMeta
-    halt 204, "No content found"
+    halt 401, "stream not found"
   end
 
   if streamMeta[:public] == 1 && !validateStreamAccess(params[:key], streamID)
@@ -62,6 +62,66 @@ get '/streams/:streamID' do
     content_type :json
     return a.to_json
   end
+end
+
+##
+##  Get Stream Data by node and key
+##
+get '/streams/node/:node' do
+  key = params[:key]
+
+  stream_id = getStreamIdfromNodeKey(params[:node], key)
+  if !stream_id
+    halt 401, "invalid key or stream"
+  end
+
+  stream_meta = getStreamMeta(stream_id)
+
+  result = $redis.zrange(stream_id, 0, -1, withscores: true)
+  a = result.map{|s| { timestamp: s[1], data: s[0].split(';;')[0] } }
+  if stream_meta[:public] == 0
+    content_type :json
+    return a.to_json
+  end
+end
+
+##
+## Update stream new new skool
+##
+put '/streams' do
+  now = Time.now.to_i
+  stream_id = ''
+
+  payload =  JSON.parse(request.body.read)
+  node = payload["node"]
+  key = payload["key"]
+
+  account_uid = getIdfromKey(key).to_s
+  halt 401, "invalid key" if !account_uid
+
+  # is this a new stream node?
+  if !database[:streams].first(:account_uid => account_uid, :name => node)
+    puts "new stream node detected: #{node}"
+    # its a new stream node. next ensure key is valid
+    puts "account_uid #{account_uid}"
+    database[:streams].insert(:account_uid => account_uid, :name => node, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
+  end
+  stream_id = getStreamIdfromNodeKey(node, key) 
+
+  data = ""
+  payload.each do |k, v|
+    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id" and k != "node"
+      data = data + "#{k}: #{v},"
+    end
+  end
+  data = data.chop
+  data = data + ";;#{now}"
+  $redis.zadd(stream_id,now,data)
+  $redis.expire(stream_id,86400)
+  # Update stream last update field
+  database[:streams].where(:name => node, :account_uid => account_uid).update(:updated_at => Time.now);
+
+  status 200
 end
 
 ##
@@ -80,7 +140,7 @@ put '/streams/:streamID' do
 
   data = ""
   payload.each do |k, v| 
-    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id"
+    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id" and k != "node"
       data = data + "#{k}: #{v},"
     end
   end
@@ -88,36 +148,6 @@ put '/streams/:streamID' do
   data = data + ";;#{now}"
   $redis.zadd(streamID,now,data)
   $redis.expire(streamID,86400)
-  # Update stream last update field
-  database[:streams].where(:id => streamID).update(:updated_at => Time.now);
-
-  status 200
-end
-
-##
-##  Update a Stream Legacy
-##
-get '/api/update' do
-  streamID = params[:stream_id]
-  now = Time.now.to_i
-
-  if !validateStreamAccess(params[:key], streamID)
-    puts "whoops!"
-    content_type :json
-    return '{"result": "failed", "message": "access denied"}'
-  end
-
-  data = ""
-  params.keys.each do |k|
-    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id"
-      data = data + "#{k}: #{params[k]},"
-    end
-  end
-
-  data = data.chop + ";;#{now}"
-  $redis.zadd(streamID,now,data)
-  $redis.expire(streamID,86400)
-
   # Update stream last update field
   database[:streams].where(:id => streamID).update(:updated_at => Time.now);
 
@@ -156,26 +186,9 @@ get '/chart_data' do
 
   series[0].split(',').each do |s|
     series_data_array.push(Array.new)
-    if @streams[:fields] != nil
-      @streams[:fields].split(':').drop(1).each do |f|
-          name = f.split(',')[0]
-          if s.split(': ')[0] == name && f.split(',')[2] != nil
-             series_data_array[1].push(f.split(',')[2])
-          end
-          if s.split(': ')[0] == name && f.split(',')[2] == nil
-            series_data_array[1].push(s.split(': ')[0])
-          end
-          if  s.split(': ')[0] == name 
-            if f.split(',')[1] != nil
-              series_data_array[2].push(f.split(',')[1])
-            else
-              series_data_array[2].push("")
-            end
-         end
-      end
-    end
+    series_data_array[1].push(s.split(': ')[0])
   end
-
+  
   # Get Time Series Data and push array spot 0
   series_ts = result.map{|s| s[1]} 
 
@@ -192,6 +205,7 @@ get '/chart_data' do
     end
   end
 
+  puts series_data_array.inspect
   content_type :json
   return series_data_array.to_json
 end
