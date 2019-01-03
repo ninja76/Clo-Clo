@@ -9,9 +9,11 @@ window.onload = function() {
     var stream_id = $('#streamID').val()
     var formData = {name:name, desc:desc};
     var fieldData = ''
-    for (i=0; i<6; i++)
+    for (i=0; i<7; i++)
     {
       var thisField= $('#field'+i+'_name').val()+','+$('#field'+i+'_uom').val()+','+$('#field'+i+'_alias').val();
+      console.log('#field'+i+'_name');
+      console.log(thisField);
       fieldData = fieldData + ':' + thisField
     }
     var formData = {name:name, desc:desc, field:fieldData};
@@ -36,6 +38,10 @@ window.onload = function() {
     });
   });
 
+  $('#hour').on('click', function () {
+    current_timerange = 3600 * 4;
+    drawCharts(current_timerange);
+  });
   $('#day').on('click', function () {
     current_timerange = 86400;
     drawCharts(current_timerange);
@@ -46,6 +52,14 @@ window.onload = function() {
   });
   $('#month').on('click', function () {
     current_timerange = 604800 *4;
+    drawCharts(current_timerange);
+  });
+  $('#3month').on('click', function () {
+    current_timerange = (604800 *4) * 3;
+    drawCharts(current_timerange);
+  });
+  $('#6month').on('click', function () {
+    current_timerange = (604800 *4) * 6;
     drawCharts(current_timerange);
   });
 

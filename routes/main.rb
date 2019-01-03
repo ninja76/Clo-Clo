@@ -2,17 +2,16 @@
 ##
 ##
 ##
-  get '/index' do
+  get '/' do
     @isloggedin = isLoggedIn(session)
     slim :main
   end
 
 ##
 ##
-##
-  get '/' do
-    redirect "/index"
-  end
+#  get '/' do
+#    redirect "/index"
+#  end
 
 ##
 ##

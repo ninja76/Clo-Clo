@@ -34,31 +34,6 @@ section.home-section.bg-white
             .form-group
               button.btn.btn-danger#btn-purge style="margin-right:15px;" type="button" Purge Data
               button.btn.btn-warning#btn-delete style="margin-right:16px;" type="button" Remove Stream
-          .row
-            h3 Fields
-            form role="form"
-            -0.upto(6) do |i|  
-              .row
-              -if @field_data[i] != nil
-                .form-group.col-md-offset-2.col-md-3
-                  label for="field#{i}_name" Field Name
-                  input.form-control id ="field#{i}_name" value="#{@field_data[i][:name]}" type="text" /
-                .form-group.col-md-2
-                  label for="field#{i}_uom" UoM
-                  input.form-control id ="field#{i}_uom" value="#{@field_data[i][:uom]}" type="text" /
-                .form-group.col-md-3
-                  label for="field#{i}_min_value" Alias
-                  input.form-control id ="field#{i}_alias" value="#{@field_data[i][:alias]}" type="text" /
-              -else
-                .form-group.col-md-offset-2.col-md-3
-                  label for="field#{i}_name" Field Name
-                  input.form-control id ="field#{i}_name" value="" type="text" /
-                .form-group.col-md-2
-                  label for="field#{i}_uom" UoM
-                  input.form-control id ="field#{i}_uom" value="" type="text" /
-                .form-group.col-md-3
-                  label for="field#{i}_min_value" Alias
-                  input.form-control id ="field#{i}_alias" value="" type="text" / 
           .modal-footer
             button.btn.btn-default data-dismiss="modal" type="button"  Close
             button.btn.btn-primary#btn-update type="button"  Update
@@ -75,5 +50,7 @@ section.home-section.bg-white
             span 7 Day
           button.btn.btn-primary#month data-style="expand-left"
             span 30 Day
+          button.btn.btn-primary#3month data-style="expand-left"
+            span 90 Day
       #streams.col-md-12
       input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" 

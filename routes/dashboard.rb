@@ -6,6 +6,7 @@
 
     @formatted_streams = []
     streams = database[:streams].filter(:account_uid => session[:user_id])
+    puts streams.inspect
     puts "UID #{session[:user_id]}"
     streams.each do |s|
       @formatted_streams << {:id=>s[:id], :name=> s[:name], :description=> s[:description], :updated_at=>time_diff(s[:updated_at])}
@@ -55,7 +56,7 @@
     puts "UID: #{session[:user_id]}"
 
     @user_meta = getUserMeta(session[:user_id])
-    puts @user_meta.inspect
+    puts "debug #{@user_meta.inspect}"
 
     slim :dashboard_account
   end
@@ -116,7 +117,7 @@
 
     updated_name = params[:name]
     updated_desc = params[:desc]
-    database[:streams].where(:id => params[:streamID]).update(:name => updated_name, :fields => params[:field], :description => updated_desc);
+    database[:streams].where(:id => params[:streamID]).update(:name => updated_name, :description => updated_desc);
 
     status 200
   end
