@@ -38,6 +38,10 @@ window.onload = function() {
     });
   });
 
+  $('#hour').on('click', function () {
+    current_timerange = 3600 * 4;
+    drawCharts(current_timerange);
+  });
   $('#day').on('click', function () {
     current_timerange = 86400;
     drawCharts(current_timerange);
@@ -48,6 +52,14 @@ window.onload = function() {
   });
   $('#month').on('click', function () {
     current_timerange = 604800 *4;
+    drawCharts(current_timerange);
+  });
+  $('#3month').on('click', function () {
+    current_timerange = (604800 *4) * 3;
+    drawCharts(current_timerange);
+  });
+  $('#6month').on('click', function () {
+    current_timerange = (604800 *4) * 6;
     drawCharts(current_timerange);
   });
 

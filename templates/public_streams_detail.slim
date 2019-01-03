@@ -16,12 +16,18 @@ section.home-section.bg-white
           h4 #{@stream_meta[:description]}
     .row
      .btn-group
+       button.btn.btn-primary#hour data-style="expand-left"
+         span 1 Hour
        button.btn.btn-primary#day data-style="expand-left" 
          span 1 Day
        button.btn.btn-primary#week data-style="expand-left"
          span 7 Day
        button.btn.btn-primary#month data-style="expand-left"
          span 30 Day
+       button.btn.btn-primary#3month data-style="expand-left"
+         span 90 Day
+       button.btn.btn-primary#6month data-style="expand-left"
+         span 6 Month
           
     #streams.col-md-11
     input#streamID name="streamID" type="hidden" value="#{@stream_meta[:id]}" /

@@ -11,9 +11,8 @@ post '/streams' do
     halt 401, "invalid key"
   end
 
-  field_default_data = ":,,,:,,,:,,,:,,,:,,,:,,,:,,,"
   user_meta = getUserMetaByKey(key)
-  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now, :fields => field_default_data)  
+  stream_id = database[:streams].insert(:account_uid => user_meta[:id], :name => name, :description => desc, :public => 0, :created_at => Time.now, :updated_at => Time.now)  
   content_type :json
   return "{\"result\": \"success\", \"stream_id\": \"#{stream_id}\", \"created_at\": #{Time.now.to_i}}"
 end
@@ -26,7 +25,7 @@ get '/streams' do
     key = params[:key]
     user_meta = getUserMetaByKey(key)
     if !user_meta
-      halt 401, "invalid key"
+      halt 401, "invalid key or stream"
     end
     streams = database[:streams].filter(:account_uid => user_meta[:id])
   else
@@ -49,7 +48,7 @@ get '/streams/id/:streamID' do
   streamMeta = getStreamMeta(streamID)
 
   if !streamMeta
-    halt 401, "stream not found"
+    halt 401, "invalid key or stream"
   end
 
   if streamMeta[:public] == 1 && !validateStreamAccess(params[:key], streamID)
@@ -91,7 +90,7 @@ end
 put '/streams' do
   now = Time.now.to_i
   stream_id = ''
-
+  puts request.body
   payload =  JSON.parse(request.body.read)
   node = payload["node"]
   key = payload["key"]
@@ -125,37 +124,7 @@ put '/streams' do
 end
 
 ##
-## Update a Stream New Skool
-##
-put '/streams/:streamID' do
-  streamID = params[:streamID]
-  now = Time.now.to_i
-  payload =  JSON.parse(request.body.read)
-
-  if !validateStreamAccess(payload['key'], streamID)
-    halt 401, "invalid key"
-  end
- 
-  stream_meta = getStreamMeta(streamID)
-
-  data = ""
-  payload.each do |k, v| 
-    if k != "splat" and k != "captures" and k != "geo" and k != "streamID" and k != "key" and k != "stream_id" and k != "node"
-      data = data + "#{k}: #{v},"
-    end
-  end
-  data = data.chop
-  data = data + ";;#{now}"
-  $redis.zadd(streamID,now,data)
-  $redis.expire(streamID,86400)
-  # Update stream last update field
-  database[:streams].where(:id => streamID).update(:updated_at => Time.now);
-
-  status 200
-end
-
-##
-##  returns chart data for use with dashboard
+##  returns custom chart data for use with built-in dashboard
 ##
 get '/chart_data' do
   now = Time.now.to_i
@@ -205,7 +174,6 @@ get '/chart_data' do
     end
   end
 
-  puts series_data_array.inspect
   content_type :json
   return series_data_array.to_json
 end

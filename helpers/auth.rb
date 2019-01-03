@@ -73,5 +73,3 @@ def getIdfromKey(key)
   end
   return false
 end
-
-

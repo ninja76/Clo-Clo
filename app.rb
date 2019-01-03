@@ -37,6 +37,7 @@ class MyApp < Sinatra::Application
       "/js/modernizr.custom.js",
       "/js/main.js"
     ]
+
     js :charts, [
       "//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js",
       "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
